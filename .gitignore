@@ -1,4 +1,4 @@
 .idea
 dependency-reduced-pom.xml
-frozencast.iml
+*.iml
 target
