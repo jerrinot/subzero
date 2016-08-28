@@ -59,26 +59,28 @@ of Hazelcast declarative configuration API. It should be fixed in the next
 version of Hazelcast.   
 
 ### Maven Configuration
-The project is currently not in Maven Central Repository. You can use [JitPack](https://www.jitpack.io/) for simple integration into your project.
+The project is currently not in Maven Central Repository. You can use 
+awesome [JitPack](https://www.jitpack.io/) service for simple integration 
+into your project.
 
 #### How to configure Maven to fetch SubZero from JitPack:
 1. Add JitPack repository into your pom.xml:
 ````xml
 <repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://www.jitpack.io</url>
-		</repository>
-	</repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://www.jitpack.io</url>
+    </repository>
+</repositories>
 ````
 
 2. Add SubZero dependency into your project:
 ````xml
-	<dependency>
-	    <groupId>com.github.jerrinot</groupId>
-	    <artifactId>subzero</artifactId>
-	    <version>master-SNAPSHOT</version>
-	</dependency>
+<dependency>
+    <groupId>com.github.jerrinot</groupId>
+    <artifactId>subzero</artifactId>
+    <version>master-SNAPSHOT</version>
+</dependency>
 ````
 
 ### TODO
