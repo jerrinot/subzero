@@ -1,7 +1,7 @@
 ## SubZero - Fast Serialization for Hazelcast
 
-SubZero provides fast & non-invasive serialization to Hazelcast. 
-It's a pre-canned integration of fast serialization libraries such as Kryo into Hazelcast. 
+SubZero provides fast & non-invasive serialization for Hazelcast. 
+It's easy-to-use integration of fast serialization libraries such as Kryo into Hazelcast. 
  
 ### How to Use SubZero?
 
