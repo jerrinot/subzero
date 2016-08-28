@@ -86,4 +86,7 @@ into your project.
 ### TODO
 - Upload into Maven Central
 - More serialization strategies. Currently Kryo is the only supported strategy.
-- Better Documentation   
+- Better Documentation
+
+### Disclaimer
+This is a community project not affiliated with the Hazelcast project. 
