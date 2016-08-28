@@ -11,6 +11,8 @@ import com.hazelcast.test.TestHazelcastInstanceFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import static info.jerrinot.subzero.SubZero.subZeroAsDefaultSerializer;
+import static info.jerrinot.subzero.SubZero.subZeroForClasses;
 import static org.junit.Assert.assertEquals;
 
 public class IntegrationTests extends HazelcastTestSupport {
@@ -38,6 +40,30 @@ public class IntegrationTests extends HazelcastTestSupport {
     @Test
     public void testTypedSerializer() {
         HazelcastInstance[] instances = factory.newInstances(createTypedConfig());
+        IMap<Integer, Person> map = instances[0].getMap("myMap");
+
+        Person joe = new Person("Joe");
+        map.put(0, joe);
+
+        assertEquals(joe, map.get(0));
+    }
+
+    @Test
+    public void testTypedSerializer_withInjector() {
+        Config config = subZeroForClasses(new Config(), Person.class);
+        HazelcastInstance[] instances = factory.newInstances(config);
+        IMap<Integer, Person> map = instances[0].getMap("myMap");
+
+        Person joe = new Person("Joe");
+        map.put(0, joe);
+
+        assertEquals(joe, map.get(0));
+    }
+
+    @Test
+    public void testGlobalSerializer_withInjector() {
+        Config config = subZeroAsDefaultSerializer(new Config());
+        HazelcastInstance[] instances = factory.newInstances(config);
         IMap<Integer, Person> map = instances[0].getMap("myMap");
 
         Person joe = new Person("Joe");

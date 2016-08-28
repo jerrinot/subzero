@@ -19,7 +19,8 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
     private KryoStrategy<T> strategy;
 
     public Serializer() {
-        this.strategy = new GlobalKryoStrategy<T>();
+        Class<T> classType = getClassType();
+        this.strategy = classType == null ? new GlobalKryoStrategy<T>() : new TypedKryoStrategy<T>(classType);
     }
 
     public Serializer(Class<T> clazz) {
@@ -44,6 +45,15 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
 
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
-        this.id = strategy.newId(hazelcastInstance);
+        this.id = getClassTypeIdInternal(hazelcastInstance);
+    }
+
+
+    protected int getClassTypeIdInternal(HazelcastInstance hazelcastInstance) {
+        return strategy.newId(hazelcastInstance);
+    }
+
+    protected Class<T> getClassType() {
+        return null;
     }
 }
