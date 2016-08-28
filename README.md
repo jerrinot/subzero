@@ -59,8 +59,8 @@ of Hazelcast declarative configuration API. It should be fixed in the next
 version of Hazelcast.   
 
 ### Maven Configuration
-The project is currently not in Maven Central Repository. You can use 
-awesome [JitPack](https://www.jitpack.io/) service for simple integration 
+The project is currently not in the Maven Central Repository. You can use 
+the awesome [JitPack](https://www.jitpack.io/) service for simple integration 
 into your project.
 
 #### How to configure Maven to fetch SubZero from JitPack:
