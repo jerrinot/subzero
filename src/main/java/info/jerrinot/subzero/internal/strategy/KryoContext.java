@@ -1,4 +1,4 @@
-package info.jerrinot.frozencast.internal.strategy;
+package info.jerrinot.subzero.internal.strategy;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.InputChunked;

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>info.jerrinot</groupId>
-    <artifactId>frozencast</artifactId>
+    <artifactId>subzero</artifactId>
     <version>0.1-SNAPSHOT</version>
 
     <properties>
@@ -72,7 +72,6 @@
                                     <exclude>com.hazelcast:*</exclude>
                                 </excludes>
                             </artifactSet>
-
                         </configuration>
                     </execution>
                 </executions>

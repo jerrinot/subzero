@@ -1,4 +1,4 @@
-package info.jerrinot.frozencast;
+package info.jerrinot.subzero;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.GlobalSerializerConfig;
@@ -50,8 +50,8 @@ public class IntegrationTests extends HazelcastTestSupport {
         Config config = new Config();
 
         SerializerConfig serializerConfig = new SerializerConfig()
-            .setTypeClassName("info.jerrinot.frozencast.Person")
-            .setClassName("info.jerrinot.frozencast.TypedSerializer");
+            .setTypeClassName("info.jerrinot.subzero.Person")
+            .setClassName("info.jerrinot.subzero.Serializer");
 
         SerializationConfig serializationConfig = config.getSerializationConfig();
         serializationConfig.addSerializerConfig(serializerConfig);
@@ -63,7 +63,7 @@ public class IntegrationTests extends HazelcastTestSupport {
         Config config = new Config();
 
         GlobalSerializerConfig globalSerializerConfig = new GlobalSerializerConfig()
-                .setClassName(GlobalSerializer.class.getName())
+                .setClassName(Serializer.class.getName())
                 .setOverrideJavaSerialization(true);
         config.getSerializationConfig().setGlobalSerializerConfig(globalSerializerConfig);
         return config;

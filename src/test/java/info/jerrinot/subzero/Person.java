@@ -1,4 +1,4 @@
-package info.jerrinot.frozencast;
+package info.jerrinot.subzero;
 
 public final class Person {
     private String name;

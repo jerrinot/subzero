@@ -1,4 +1,4 @@
-package info.jerrinot.frozencast.internal.strategy;
+package info.jerrinot.subzero.internal.strategy;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -6,7 +6,7 @@ import com.esotericsoftware.kryo.io.InputChunked;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.OutputChunked;
 import com.hazelcast.core.HazelcastInstance;
-import info.jerrinot.frozencast.internal.IdGeneratorUtils;
+import info.jerrinot.subzero.internal.IdGeneratorUtils;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ import static java.lang.Integer.getInteger;
 
 public abstract class KryoStrategy<T> {
 
-    private static final int BUFFER_SIZE = getInteger("frozencast.buffer.size.kb", 16) * 1024;
+    private static final int BUFFER_SIZE = getInteger("subzero.buffer.size.kb", 16) * 1024;
 
     private static final ThreadLocal<KryoContext> KRYOS = new ThreadLocal<KryoContext>() {
         protected KryoContext initialValue() {

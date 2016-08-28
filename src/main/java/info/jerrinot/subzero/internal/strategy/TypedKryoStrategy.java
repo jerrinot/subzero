@@ -1,10 +1,10 @@
-package info.jerrinot.frozencast.internal.strategy;
+package info.jerrinot.subzero.internal.strategy;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.hazelcast.core.HazelcastInstance;
-import info.jerrinot.frozencast.internal.IdGeneratorUtils;
+import info.jerrinot.subzero.internal.IdGeneratorUtils;
 
 public class TypedKryoStrategy<T> extends KryoStrategy<T> {
 

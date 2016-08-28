@@ -1,6 +1,6 @@
-package info.jerrinot.frozencast;
+package info.jerrinot.subzero;
 
-import info.jerrinot.frozencast.internal.strategy.GlobalKryoStrategy;
+import info.jerrinot.subzero.internal.strategy.GlobalKryoStrategy;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;

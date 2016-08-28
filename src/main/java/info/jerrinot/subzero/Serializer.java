@@ -1,13 +1,13 @@
-package info.jerrinot.frozencast;
+package info.jerrinot.subzero;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
-import info.jerrinot.frozencast.internal.strategy.GlobalKryoStrategy;
-import info.jerrinot.frozencast.internal.strategy.KryoStrategy;
-import info.jerrinot.frozencast.internal.strategy.TypedKryoStrategy;
+import info.jerrinot.subzero.internal.strategy.GlobalKryoStrategy;
+import info.jerrinot.subzero.internal.strategy.KryoStrategy;
+import info.jerrinot.subzero.internal.strategy.TypedKryoStrategy;
 
 import java.io.IOException;
 import java.io.InputStream;
