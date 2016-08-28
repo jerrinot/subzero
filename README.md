@@ -74,7 +74,7 @@ into your project.
 </repositories>
 ````
 
-2. Add SubZero dependency into your project:
+2. Add SubZero as a dependency into your project:
 ````xml
 <dependency>
     <groupId>com.github.jerrinot</groupId>
