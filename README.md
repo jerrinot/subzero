@@ -1,6 +1,8 @@
 ![Phase Diagram](http://i.imgur.com/T080T6c.png)
 
 ## SubZero - Fast Serialization for Hazelcast
+
+[![Join the chat at https://gitter.im/subzero-hz/Lobby](https://badges.gitter.im/subzero-hz/Lobby.svg)](https://gitter.im/subzero-hz/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/jerrinot/subzero.svg?branch=master)](https://travis-ci.org/jerrinot/subzero)
 
 SubZero provides fast & non-invasive serialization for Hazelcast. 
