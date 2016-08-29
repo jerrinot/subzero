@@ -7,6 +7,31 @@
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero</artifactId>
     <version>0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>SubZero</name>
+    <description>SubZero - Fast Serialization for Hazelcast</description>
+    <url>https://github.com/jerrinot/subzero</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Jaromir Hamala</name>
+            <email>jaromir.hamala@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:jerrinot/subzero.git</connection>
+        <developerConnection>scm:git:git@github.com:jerrinot/subzero.git</developerConnection>
+        <url>https://github.com/jerrinot/subzero</url>
+    </scm>
 
     <properties>
         <java.version>1.6</java.version>
