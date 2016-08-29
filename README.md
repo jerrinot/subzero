@@ -23,10 +23,9 @@ Insert this snippet into your Hazelcast configuration XML:
 
 ##### Programmatic Configuration:
 ````java
-import static info.jerrinot.subzero.SubZero.subZeroAsDefaultSerializer;
-[...]
-Config hazelcastConfig = new Config();
-subZeroAsDefaultSerializer(hazelcastConfig);
+Config config = new Config();
+SubZero.useAsGlobalSerializer(config);
+HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 ````
 
 #### Use SubZero for selected classes only
@@ -46,10 +45,9 @@ In this mode Hazelcast will use SubZero for selected classes only.
 
 ##### Programmatic Configuration:
 ````java
-import static info.jerrinot.subzero.SubZero.subZeroForClasses;
-[...]
-Config hazelcastConfig = new Config();
-subZeroForClasses(hazelcastConfig, Foo.class, Bar.class);
+Config config = new Config();
+SubZero.useForClasses(config, Foo.class, Bar.class);
+HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 ````
 
 All cluster members have to use SubZero for the same types and the types
