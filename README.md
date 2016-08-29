@@ -86,7 +86,6 @@ version with regular dependencies:
 SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
 ### TODO
-- Upload into Maven Central
 - More serialization strategies. Currently Kryo is the only supported
   strategy.
 - Better Documentation
