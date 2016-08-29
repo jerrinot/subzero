@@ -12,9 +12,6 @@
     <modules>
         <module>subzero-core</module>
         <module>subzero-all</module>
-        <module>subzero-all-it-hz36</module>
-        <module>subzero-it-base</module>
-        <module>subzero-all-it-hz37</module>
     </modules>
 
     <name>SubZero</name>
@@ -54,8 +51,11 @@
 
     <profiles>
         <profile>
-            <id>hazelcast-snapshot</id>
+            <id>it</id>
             <modules>
+                <module>subzero-it-base</module>
+                <module>subzero-all-it-hz36</module>
+                <module>subzero-all-it-hz37</module>
                 <module>subzero-all-it-hz38</module>
             </modules>
         </profile>
