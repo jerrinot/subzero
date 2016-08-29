@@ -75,8 +75,8 @@ into your project.
 2. Add SubZero as a dependency into your project:
 ````xml
 <dependency>
-    <groupId>com.github.jerrinot</groupId>
-    <artifactId>subzero</artifactId>
+    <groupId>com.github.jerrinot.subzero</groupId>
+    <artifactId>subzero-all</artifactId>
     <version>master-SNAPSHOT</version>
 </dependency>
 ````
