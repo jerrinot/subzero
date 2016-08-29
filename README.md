@@ -66,22 +66,24 @@ into your project.
 
 #### How to configure Maven to fetch SubZero from JitPack:
 1. Add JitPack repository into your pom.xml:
-````xml
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://www.jitpack.io</url>
-    </repository>
-</repositories>
-````
+
+    ````xml
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://www.jitpack.io</url>
+        </repository>
+    </repositories>
+    ````
 
 2. Add SubZero as a dependency into your project:
-````xml
-<dependency>
-    <groupId>com.github.jerrinot.subzero</groupId>
-    <artifactId>subzero-all</artifactId>
-    <version>master-SNAPSHOT</version>
-</dependency>
+
+    ````xml
+    <dependency>
+        <groupId>com.github.jerrinot.subzero</groupId>
+        <artifactId>subzero-all</artifactId>
+        <version>master-SNAPSHOT</version>
+    </dependency>
 ````
 
 ### Hazelcast Compatibility
