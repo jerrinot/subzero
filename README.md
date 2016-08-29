@@ -52,10 +52,10 @@ HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 ````
 
 All cluster members have to use SubZero for the same types and the types
-have to be declared in the same order. Currently programmatic configuration
-will result in somewhat higher performance - this is given by a limitation
-of Hazelcast declarative configuration API. It should be fixed in the next
-version of Hazelcast.   
+have to be declared in the same order. As of Hazelcast 3.7 programmatic 
+configuration will result in somewhat higher performance - this is given
+by a limitation of Hazelcast declarative configuration API. It should be 
+fixed Hazelcast 3.8
 
 ### Maven Configuration
 The project is currently not in the Maven Central Repository. You can use 
@@ -81,6 +81,9 @@ into your project.
     <version>master-SNAPSHOT</version>
 </dependency>
 ````
+
+### Hazelcast Compatibility
+SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
 ### TODO
 - Upload into Maven Central
