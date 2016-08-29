@@ -89,6 +89,7 @@ SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 - More serialization strategies. Currently Kryo is the only supported
   strategy.
 - Better Documentation
+- Serializer Generator
 
 ### Disclaimer
 This is a community project not affiliated with the Hazelcast project. 
