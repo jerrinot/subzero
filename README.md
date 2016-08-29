@@ -1,4 +1,4 @@
-[![Phase Diagram](http://i.imgur.com/T080T6c.png)]
+![Phase Diagram](http://i.imgur.com/T080T6c.png)
 
 ## SubZero - Fast Serialization for Hazelcast
 [![Build Status](https://travis-ci.org/jerrinot/subzero.svg?branch=master)](https://travis-ci.org/jerrinot/subzero)
