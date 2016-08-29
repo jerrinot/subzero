@@ -1,4 +1,4 @@
-package info.jerrinot.subzero;
+package info.jerrinot.subzero.it;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.GlobalSerializerConfig;
@@ -8,6 +8,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.test.TestHazelcastInstanceFactory;
+import info.jerrinot.subzero.Serializer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +16,7 @@ import static info.jerrinot.subzero.SubZero.useAsGlobalSerializer;
 import static info.jerrinot.subzero.SubZero.useForClasses;
 import static org.junit.Assert.assertEquals;
 
-public class IntegrationTests extends HazelcastTestSupport {
-
+public abstract class BaseSmokeTests extends HazelcastTestSupport {
     private static final int CLUSTER_SIZE = 2;
 
     private TestHazelcastInstanceFactory factory;
@@ -76,8 +76,8 @@ public class IntegrationTests extends HazelcastTestSupport {
         Config config = new Config();
 
         SerializerConfig serializerConfig = new SerializerConfig()
-            .setTypeClassName("info.jerrinot.subzero.Person")
-            .setClassName("info.jerrinot.subzero.Serializer");
+                .setTypeClassName("info.jerrinot.subzero.it.Person")
+                .setClassName("info.jerrinot.subzero.Serializer");
 
         SerializationConfig serializationConfig = config.getSerializationConfig();
         serializationConfig.addSerializerConfig(serializerConfig);
@@ -94,6 +94,5 @@ public class IntegrationTests extends HazelcastTestSupport {
         config.getSerializationConfig().setGlobalSerializerConfig(globalSerializerConfig);
         return config;
     }
-
 
 }

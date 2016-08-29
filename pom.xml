@@ -12,6 +12,10 @@
     <modules>
         <module>subzero-core</module>
         <module>subzero-all</module>
+        <module>subzero-all-it-hz36</module>
+        <module>subzero-it-base</module>
+        <module>subzero-all-it-hz37</module>
+        <module>subzero-all-it-hz38</module>
     </modules>
 
     <name>SubZero</name>
@@ -40,6 +44,7 @@
 
     <properties>
         <java.version>1.6</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <kryo.version>4.0.0</kryo.version>
         <hazelcast.version>3.7</hazelcast.version>
