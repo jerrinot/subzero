@@ -43,6 +43,7 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
         strategy.destroy(hazelcastInstance);
     }
 
+    @Override
     public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
         this.hazelcastInstance = hazelcastInstance;
         this.id = getClassTypeIdInternal(hazelcastInstance);
