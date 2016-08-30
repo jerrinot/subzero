@@ -4,7 +4,7 @@
 
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -34,7 +34,7 @@
         <connection>scm:git:git@github.com:jerrinot/subzero.git</connection>
         <developerConnection>scm:git:git@github.com:jerrinot/subzero.git</developerConnection>
         <url>https://github.com/jerrinot/subzero</url>
-      <tag>HEAD</tag>
+      <tag>v0.3</tag>
   </scm>
 
     <properties>
