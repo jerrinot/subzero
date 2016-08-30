@@ -105,7 +105,7 @@ Default SubZero serializer implementation uses auto-generated class
 type IDs and relies on a serializer registration order. This means all
 your cluster members have to use the same order in Hazelcast serializer
 configuration. This can be somewhat fragile. You can make it more robust
-by providing subclassing Serializer and provide fixes class ID:
+by subclassing Serializer and returning a fixed class ID:
 ````java
 public class HashMapSerializerExample extends Serializer<HashMap> {
 
