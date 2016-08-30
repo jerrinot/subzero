@@ -1,6 +1,6 @@
-package info.jerrinot.subzero;
+package info.jerrinot.subzero.internal.strategy;
 
-import info.jerrinot.subzero.internal.strategy.GlobalKryoStrategy;
+import info.jerrinot.subzero.test.NonSerializableObject;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
@@ -13,14 +13,14 @@ public class GlobalKryoStrategyTest {
 
     @Test
     public void foo() throws IOException {
-        Person joe = new Person("Joe");
+        NonSerializableObject joe = new NonSerializableObject("Joe");
         GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         kryoStrategy.write(baos, joe);
         byte[] bytes = baos.toByteArray();
         ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        Person deserialized = (Person) kryoStrategy.read(bais);
+        NonSerializableObject deserialized = (NonSerializableObject) kryoStrategy.read(bais);
 
         assertEquals(joe, deserialized);
     }

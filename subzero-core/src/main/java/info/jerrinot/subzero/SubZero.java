@@ -24,7 +24,7 @@ public final class SubZero {
      * This method configures Hazelcast to delegate a class serialization to SubZero when the class
      * has no explicit strategy configured.
      *
-     * @param config Hazecast configuration to inject SubZero into
+     * @param config Hazelcast configuration to inject SubZero into
      * @return Hazelcast configuration.
      */
     public static Config useAsGlobalSerializer(Config config) {

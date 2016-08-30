@@ -1,13 +1,13 @@
-package info.jerrinot.subzero;
+package info.jerrinot.subzero.test;
 
-public final class Person {
+public final class NonSerializableObject {
     private String name;
 
-    public Person(String name) {
+    public NonSerializableObject(String name) {
         this.name = name;
     }
 
-    public Person() { }
+    public NonSerializableObject() { }
 
     public String getName() {
         return name;
@@ -16,11 +16,11 @@ public final class Person {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Person)) return false;
+        if (!(o instanceof NonSerializableObject)) return false;
 
-        Person person = (Person) o;
+        NonSerializableObject nonSerializableObject = (NonSerializableObject) o;
 
-        return name.equals(person.name);
+        return name.equals(nonSerializableObject.name);
 
     }
 
@@ -31,7 +31,7 @@ public final class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "NonSerializableObject{" +
                 "name='" + name + '\'' +
                 '}';
     }
