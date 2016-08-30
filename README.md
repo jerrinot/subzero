@@ -1,20 +1,30 @@
-## SubZero - Fast Serialization for Hazelcast
+# SubZero - Fast Serialization for Hazelcast
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all)
 [![Build Status](https://travis-ci.org/jerrinot/subzero.svg?branch=master)](https://travis-ci.org/jerrinot/subzero)
 [![Join the chat at https://gitter.im/subzero-hz/Lobby](https://badges.gitter.im/subzero-hz/Lobby.svg)](https://gitter.im/subzero-hz/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-SubZero provides fast & non-invasive serialization for Hazelcast. 
-It's easy-to-use integration of fast serialization libraries such as Kryo
-into Hazelcast. 
- 
-### How to Use SubZero?
+SubZero provides dead easy Hazelcast - Kryo integration. 
 
-#### Use SubZero for all classes
+## Why?
+Kryo is a popular serialization library. It's [super-fast](https://github.com/eishay/jvm-serializers/wiki) yet easy-to-use.
+It does not pollute your domain model and it can even serialize classes
+which are not marked as `Serializable`. 
+
+Hazelcast has no out-of-the box support for Kryo. It's rather [easy](http://blog.hazelcast.com/kryo-serializer/) to
+integrate it, however it means everyone has to write the some code and
+face the [same bugs](https://github.com/hazelcast/hazelcast/issues?utf8=%E2%9C%93&q=is%3Aissue%20kryo).
+ 
+This project aims to make Kryo - Hazelcast integration as simple as possible.
+ 
+
+## How to Use SubZero?
+
+### Use SubZero for all classes
 SubZero will completely replace Java serialization. Hazelcast internal
 serializers will still take precedence.
 
-##### Declarative Configuration:
+#### Declarative Configuration:
 Insert this snippet into your Hazelcast configuration XML:
 ````xml
 <serialization>
@@ -26,17 +36,17 @@ Insert this snippet into your Hazelcast configuration XML:
 </serialization>
 ````
 
-##### Programmatic Configuration:
+#### Programmatic Configuration:
 ````java
 Config config = new Config();
 SubZero.useAsGlobalSerializer(config);
 HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 ````
 
-#### Use SubZero for selected classes only
+### Use SubZero for selected classes only
 In this mode Hazelcast will use SubZero for selected classes only. 
 
-##### Declarative Configuration:
+#### Declarative Configuration:
 ````xml
 <serialization>
     <serializers>
@@ -48,7 +58,7 @@ In this mode Hazelcast will use SubZero for selected classes only.
 </serialization>
 ````
 
-##### Programmatic Configuration:
+#### Programmatic Configuration:
 ````java
 Config config = new Config();
 SubZero.useForClasses(config, Foo.class, Bar.class);
@@ -61,7 +71,7 @@ configuration will result in somewhat higher performance - this is given
 by a limitation of Hazelcast declarative configuration API. It should be 
 fixed Hazelcast 3.8
 
-### Maven Coordinates
+## Maven Coordinates
 SubZero is available in Maven Central. Just insert this snippet into 
 pom.xml and you are ready to roll! 
 ````xml
@@ -81,10 +91,10 @@ version with regular dependencies:
 </dependency>
 ````
 
-### Hazelcast Compatibility
+## Hazelcast Compatibility
 SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
-### Configuration
+## Configuration
 - System property `subzero.buffer.size.kb` sets buffer size for Kryo.
   Default value: 16KB
 - System property `subzero.base.type.id` sets base for auto-generated
@@ -119,11 +129,13 @@ public class HashMapSerializerExample extends Serializer<HashMap> {
 ````
   
 
-### TODO
+## Further Ideas
 - More serialization strategies. Currently Kryo is the only supported
-  strategy.
-- Better Documentation
-- Serializer Generator
+  strategy. I would like to add Fast Serialization
+- Serializer Generator - SubZero could generate highly-optimized
+  serializer for simple classes
+- AutoPortable - serialize an ordinary class as it implemented
+  Portable interface 
 
 ### Disclaimer
 This is a community project not affiliated with the Hazelcast project. 
