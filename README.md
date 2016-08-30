@@ -15,7 +15,7 @@ Hazelcast has no out-of-the box support for Kryo. It's rather [easy](http://blog
 integrate it, however it means everyone has to write the some code and
 face the [same bugs](https://github.com/hazelcast/hazelcast/issues?utf8=%E2%9C%93&q=is%3Aissue%20kryo).
  
-This project aims to make Kryo - Hazelcast integration as simple as possible.
+SubZero aims to make Kryo - Hazelcast integration as simple as possible.
  
 
 ## How to Use SubZero?
@@ -91,9 +91,6 @@ version with regular dependencies:
 </dependency>
 ````
 
-## Hazelcast Compatibility
-SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
-
 ## Configuration
 - System property `subzero.buffer.size.kb` sets buffer size for Kryo.
   Default value: 16KB
@@ -127,7 +124,9 @@ public class HashMapSerializerExample extends Serializer<HashMap> {
     }
 }
 ````
-  
+
+## Hazelcast Compatibility
+SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
 ## Further Ideas
 - More serialization strategies. Currently Kryo is the only supported
@@ -137,5 +136,5 @@ public class HashMapSerializerExample extends Serializer<HashMap> {
 - AutoPortable - serialize an ordinary class as it implemented
   Portable interface 
 
-### Disclaimer
+## Disclaimer
 This is a community project not affiliated with the Hazelcast project. 
