@@ -77,7 +77,7 @@ version with regular dependencies:
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-core</artifactId>
-    <version>0.2</version>
+    <version>0.3</version>
 </dependency>
 ````
 
