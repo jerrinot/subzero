@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/jerrinot/subzero.svg?branch=master)](https://travis-ci.org/jerrinot/subzero)
 [![Join the chat at https://gitter.im/subzero-hz/Lobby](https://badges.gitter.im/subzero-hz/Lobby.svg)](https://gitter.im/subzero-hz/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-SubZero provides dead easy Hazelcast - Kryo integration. 
+SubZero provides dead easy Hazelcast - Kryo integration. No coding required.
 
 ## Why?
 Kryo is a popular serialization library. It's [super-fast](https://github.com/eishay/jvm-serializers/wiki) yet easy-to-use.
