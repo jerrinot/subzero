@@ -197,30 +197,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <configuration>
-                            <showDeprecation>true</showDeprecation>
-                            <showWarnings>true</showWarnings>
-                            <compilerArguments>
-                                <source>${java.source.version}</source>
-                                <target>${java.target.version}</target>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>default-testCompile</id>
-                        <configuration>
-                            <showDeprecation>true</showDeprecation>
-                            <showWarnings>true</showWarnings>
-                            <compilerArguments>
-                                <source>${java.testSource.version}</source>
-                                <target>${java.testTarget.version}</target>
-                            </compilerArguments>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <source>${java.source.version}</source>
+                    <target>${java.target.version}</target>
+                    <testSource>${java.testSource.version}</testSource>
+                    <testTarget>${java.testTarget.version}</testTarget>
+                </configuration>
             </plugin>
 
             <plugin>
