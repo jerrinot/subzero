@@ -28,7 +28,7 @@ public class HashMapSerializerExample extends Serializer<HashMap> {
     /**
      * TypeId has to be a unique for each registered serializer.
      *
-     * @return ID of classes serialized by this serializer
+     * @return TypeId of the class serialized by this serializer
      */
     @Override
     public int getTypeId() {
