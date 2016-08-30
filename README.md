@@ -1,5 +1,3 @@
-![Phase Diagram](http://i.imgur.com/T080T6c.png)
-
 ## SubZero - Fast Serialization for Hazelcast
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all)
