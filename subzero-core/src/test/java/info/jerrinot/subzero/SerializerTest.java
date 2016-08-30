@@ -2,13 +2,10 @@ package info.jerrinot.subzero;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.serialization.InternalSerializationService;
-import com.hazelcast.internal.serialization.impl.ObjectDataInputStream;
-import com.hazelcast.internal.serialization.impl.ObjectDataOutputStream;
+import info.jerrinot.subzero.test.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -95,7 +92,7 @@ public class SerializerTest {
         String input = "foo";
         Serializer<String> serializer = new Serializer();
 
-        String output = serializedAndDeserializeObject(input, serializer);
+        String output = TestUtils.serializeAndDeserializeObject(serializer, input);
 
         assertEquals(input, output);
     }
@@ -105,17 +102,9 @@ public class SerializerTest {
         String input = "foo";
         Serializer<String> serializer = new Serializer(String.class);
 
-        String output = serializedAndDeserializeObject(input, serializer);
+        String output = TestUtils.serializeAndDeserializeObject(serializer, input);
 
         assertEquals(input, output);
     }
 
-    private <T> T serializedAndDeserializeObject(T input, Serializer<T> serializer) throws IOException {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ObjectDataOutputStream odos = new ObjectDataOutputStream(os, mockSerializationService);
-        serializer.write(odos, input);
-        ObjectDataInputStream odis = new ObjectDataInputStream(new ByteArrayInputStream(os.toByteArray()),
-                mockSerializationService);
-        return serializer.read(odis);
-    }
 }

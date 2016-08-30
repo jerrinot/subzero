@@ -84,6 +84,41 @@ version with regular dependencies:
 ### Hazelcast Compatibility
 SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
+### Configuration
+- System property `subzero.buffer.size.kb` sets buffer size for Kryo.
+  Default value: 16KB
+- System property `subzero.base.type.id` sets base for auto-generated
+  type id
+
+## Extensions
+SubZero aims to provide the simplest possible way to hook Kryo
+serialization into Hazelcast.   
+
+Default SubZero serializer implementation uses auto-generated class
+type IDs and relies on a serializer registration order. This means all
+your cluster members have to use the same order for serializer
+registration. This can be somewhat fragile. You can make it more robust
+by providing subclassing Serializer and provide fixes class ID:
+````java
+public class HashMapSerializerExample extends Serializer<HashMap> {
+
+    public HashMapSerializerExample() {
+        super(HashMap.class);
+    }
+
+    /**
+     * TypeId has to be a unique for each registered serializer.
+     *
+     * @return ID of classes serialized by this serializer
+     */
+    @Override
+    public int getTypeId() {
+        return 10000;
+    }
+}
+````
+  
+
 ### TODO
 - More serialization strategies. Currently Kryo is the only supported
   strategy.

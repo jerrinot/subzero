@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.Collections.newSetFromMap;
 
 public class IdGeneratorUtils {
-    private static final int BASE_ID = Integer.getInteger("subzero.base.id", 6000);
+    private static final int BASE_ID = Integer.getInteger("subzero.base.type.id", 6000);
 
     private static ConcurrentHashMap<HazelcastInstance, IdSequence> counterMap =
             new ConcurrentHashMap<HazelcastInstance, IdSequence>();
