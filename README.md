@@ -11,8 +11,8 @@ Kryo is a popular serialization library. It's [super-fast](https://github.com/ei
 It does not pollute your domain model and it can even serialize classes
 which are not marked as `Serializable`. 
 
-Hazelcast has no out-of-the box support for Kryo. It's rather [easy](http://blog.hazelcast.com/kryo-serializer/) to
-integrate it, however it means everyone has to write the some code and
+Hazelcast has no out-of-the box support for Kryo. It's [rather easy](http://blog.hazelcast.com/kryo-serializer/) to
+integrate it, however it means everyone has to write the same code and
 face the [same bugs](https://github.com/hazelcast/hazelcast/issues?utf8=%E2%9C%93&q=is%3Aissue%20kryo).
  
 SubZero aims to make Kryo - Hazelcast integration as simple as possible.
