@@ -136,5 +136,9 @@ SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 - AutoPortable - serialize an ordinary class as it implemented
   Portable interface 
 
+## Notable Contributors
+- [Ashok Koyi](https://github.com/thekalinga) reported a [first bug](https://github.com/jerrinot/subzero/issues/3) and also came up with a solution. 
+
+
 ## Disclaimer
 This is a community project not affiliated with the Hazelcast project. 
