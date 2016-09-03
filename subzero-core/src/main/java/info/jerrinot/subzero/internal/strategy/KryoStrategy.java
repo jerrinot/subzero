@@ -22,7 +22,7 @@ public abstract class KryoStrategy<T> {
     private static final ThreadLocal<KryoContext> KRYOS = new ThreadLocal<KryoContext>() {
         protected KryoContext initialValue() {
             Kryo kryo = new Kryo();
-            kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
+            kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
             OutputChunked output = new OutputChunked(BUFFER_SIZE);
             InputChunked input = new InputChunked(BUFFER_SIZE);
             return new KryoContext(kryo, input, output);
