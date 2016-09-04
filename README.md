@@ -87,7 +87,7 @@ version with regular dependencies:
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-core</artifactId>
-    <version>0.4</version>
+    <version>0.4su</version>
 </dependency>
 ````
 
@@ -135,6 +135,8 @@ SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
   serializer for simple classes
 - AutoPortable - serialize an ordinary class as it implemented
   Portable interface 
+  
+
 
 ## Notable Contributors
 - [Ashok Koyi](https://github.com/thekalinga) reported a [first bug](https://github.com/jerrinot/subzero/issues/3) and also came up with a solution. 
