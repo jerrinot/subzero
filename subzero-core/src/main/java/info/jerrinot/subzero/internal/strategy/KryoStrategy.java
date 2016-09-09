@@ -16,26 +16,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static java.lang.Boolean.getBoolean;
 import static java.lang.Integer.getInteger;
 
 public abstract class KryoStrategy<T> {
 
     private static final int BUFFER_SIZE = getInteger("subzero.buffer.size.kb", 16) * 1024;
+    private static final boolean IGNORE_HAZELCAST_CLASSLOADER = getBoolean("subzero.classloading.ignore");
+
     private HazelcastInstance hazelcastInstance;
 
     private final ThreadLocal<KryoContext> KRYOS = new ThreadLocal<KryoContext>() {
         protected KryoContext initialValue() {
-            ClassLoader classLoader = ClassLoaderUtils.getConfiguredClassLoader(hazelcastInstance);
-            DelegatingClassResolver classResolver = new DelegatingClassResolver(classLoader);
-            MapReferenceResolver mapReferenceResolver = new MapReferenceResolver();
-            DefaultStreamFactory defaultStreamFactory = new DefaultStreamFactory();
-            Kryo kryo = new Kryo(classResolver, mapReferenceResolver, defaultStreamFactory);
-            kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+            Kryo kryo = newKryoInstance();
             OutputChunked output = new OutputChunked(BUFFER_SIZE);
             InputChunked input = new InputChunked(BUFFER_SIZE);
             return new KryoContext(kryo, input, output);
         }
     };
+
+    private Kryo newKryoInstance() {
+        Kryo kryo;
+        if (IGNORE_HAZELCAST_CLASSLOADER) {
+            kryo = new Kryo();
+        } else {
+            ClassLoader classLoader = ClassLoaderUtils.getConfiguredClassLoader(hazelcastInstance);
+            DelegatingClassResolver classResolver = new DelegatingClassResolver(classLoader);
+            MapReferenceResolver mapReferenceResolver = new MapReferenceResolver();
+            DefaultStreamFactory defaultStreamFactory = new DefaultStreamFactory();
+            kryo = new Kryo(classResolver, mapReferenceResolver, defaultStreamFactory);
+        }
+        kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+        return kryo;
+    }
 
     HazelcastInstance getHazelcastInstance() {
         return hazelcastInstance;
