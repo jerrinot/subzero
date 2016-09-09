@@ -1,4 +1,4 @@
-#!/usr/bash
+#!/bin/bash
 
 set -e
 echo Preparing Release
