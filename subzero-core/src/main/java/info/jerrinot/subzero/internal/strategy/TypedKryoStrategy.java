@@ -25,7 +25,7 @@ public class TypedKryoStrategy<T> extends KryoStrategy<T> {
     }
 
     @Override
-    public int newId(HazelcastInstance hazelcastInstance) {
-        return IdGeneratorUtils.newIdForType(hazelcastInstance, clazz);
+    public int newId() {
+        return IdGeneratorUtils.newIdForType(getHazelcastInstance(), clazz);
     }
 }

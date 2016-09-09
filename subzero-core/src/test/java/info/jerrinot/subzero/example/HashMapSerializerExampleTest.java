@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
+import static info.jerrinot.subzero.test.TestUtils.newMockHazelcastInstance;
 import static org.junit.Assert.*;
 
 public class HashMapSerializerExampleTest {
@@ -12,6 +13,7 @@ public class HashMapSerializerExampleTest {
     @Test
     public void testHashMapSerializer() throws Exception {
         HashMapSerializerExample serializer = new HashMapSerializerExample();
+        serializer.setHazelcastInstance(newMockHazelcastInstance());
 
         HashMap<Integer, String> inputMap = new HashMap<>();
         inputMap.put(0, "Zero");

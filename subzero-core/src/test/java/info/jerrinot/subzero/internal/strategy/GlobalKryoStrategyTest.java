@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static info.jerrinot.subzero.test.TestUtils.newMockHazelcastInstance;
 import static org.junit.Assert.assertEquals;
 
 public class GlobalKryoStrategyTest {
@@ -15,6 +16,7 @@ public class GlobalKryoStrategyTest {
     public void foo() throws IOException {
         NonSerializableObject joe = new NonSerializableObject("Joe");
         GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy();
+        kryoStrategy.setHazelcastInstance(newMockHazelcastInstance());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         kryoStrategy.write(baos, joe);

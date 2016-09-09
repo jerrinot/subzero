@@ -19,7 +19,7 @@ public final class GlobalKryoStrategy<T> extends KryoStrategy<T> {
     }
 
     @Override
-    public int newId(HazelcastInstance hazelcastInstance) {
-        return IdGeneratorUtils.newId(hazelcastInstance);
+    public int newId() {
+        return IdGeneratorUtils.newId(getHazelcastInstance());
     }
 }

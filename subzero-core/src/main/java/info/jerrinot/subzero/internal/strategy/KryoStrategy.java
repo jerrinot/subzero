@@ -5,7 +5,10 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.InputChunked;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.OutputChunked;
+import com.esotericsoftware.kryo.util.DefaultStreamFactory;
+import com.esotericsoftware.kryo.util.MapReferenceResolver;
 import com.hazelcast.core.HazelcastInstance;
+import info.jerrinot.subzero.internal.ClassLoaderUtils;
 import info.jerrinot.subzero.internal.IdGeneratorUtils;
 import org.objenesis.strategy.StdInstantiatorStrategy;
 
@@ -18,16 +21,29 @@ import static java.lang.Integer.getInteger;
 public abstract class KryoStrategy<T> {
 
     private static final int BUFFER_SIZE = getInteger("subzero.buffer.size.kb", 16) * 1024;
+    private HazelcastInstance hazelcastInstance;
 
-    private static final ThreadLocal<KryoContext> KRYOS = new ThreadLocal<KryoContext>() {
+    private final ThreadLocal<KryoContext> KRYOS = new ThreadLocal<KryoContext>() {
         protected KryoContext initialValue() {
-            Kryo kryo = new Kryo();
+            ClassLoader classLoader = ClassLoaderUtils.getConfiguredClassLoader(hazelcastInstance);
+            DelegatingClassResolver classResolver = new DelegatingClassResolver(classLoader);
+            MapReferenceResolver mapReferenceResolver = new MapReferenceResolver();
+            DefaultStreamFactory defaultStreamFactory = new DefaultStreamFactory();
+            Kryo kryo = new Kryo(classResolver, mapReferenceResolver, defaultStreamFactory);
             kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
             OutputChunked output = new OutputChunked(BUFFER_SIZE);
             InputChunked input = new InputChunked(BUFFER_SIZE);
             return new KryoContext(kryo, input, output);
         }
     };
+
+    HazelcastInstance getHazelcastInstance() {
+        return hazelcastInstance;
+    }
+
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        this.hazelcastInstance = hazelcastInstance;
+    }
 
     public void write(OutputStream out, T object) throws IOException {
         KryoContext kryoContext = KRYOS.get();
@@ -54,5 +70,5 @@ public abstract class KryoStrategy<T> {
         IdGeneratorUtils.instanceDestroyed(hazelcastInstance);
     }
 
-    public abstract int newId(HazelcastInstance hazelcastInstance);
+    public abstract int newId();
 }
