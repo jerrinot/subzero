@@ -25,6 +25,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-client</artifactId>
+            <version>${hazelcast.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
@@ -37,6 +44,14 @@
             <version>${hazelcast.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-client</artifactId>
+            <version>${hazelcast.version}</version>
+            <scope>test</scope>
+            <classifier>tests</classifier>
         </dependency>
 
         <dependency>

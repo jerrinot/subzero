@@ -1,5 +1,6 @@
 package info.jerrinot.subzero;
 
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.GlobalSerializerConfig;
 import com.hazelcast.config.SerializationConfig;
@@ -29,13 +30,45 @@ public final class SubZero {
      */
     public static Config useAsGlobalSerializer(Config config) {
         SerializationConfig serializationConfig = config.getSerializationConfig();
+        injectSubZero(serializationConfig);
+        return config;
+    }
+
+    /**
+     * Use SubZero as a global serializer.
+     *
+     * This method configures Hazelcast to delegate a class serialization to SubZero when the class
+     * has no explicit strategy configured.
+     *
+     * This method it intended to be used to configure {@link ClientConfig} instances, but
+     * I do not want to create a hard-dependency on Hazelcast Client module.
+     *
+     * @param config Hazelcast configuration to inject SubZero into
+     * @return Hazelcast configuration.
+     */
+    public static <T> T useAsGlobalSerializer(T config) {
+        String className = config.getClass().getName();
+        SerializationConfig serializationConfig;
+        if (className.equals("com.hazelcast.client.config.ClientConfig")) {
+            ClientConfig clientConfig = (ClientConfig) config;
+            serializationConfig = clientConfig.getSerializationConfig();
+        } else if (className.equals("com.hazelcast.config.Config")) {
+            Config memberConfig = (Config) config;
+            serializationConfig = memberConfig.getSerializationConfig();
+        } else {
+            throw new IllegalArgumentException("Unknown configuration object " + config);
+        }
+        injectSubZero(serializationConfig);
+        return config;
+    }
+
+    private static void injectSubZero(SerializationConfig serializationConfig) {
         GlobalSerializerConfig globalSerializerConfig = serializationConfig.getGlobalSerializerConfig();
         if (globalSerializerConfig == null) {
             globalSerializerConfig = new GlobalSerializerConfig();
             serializationConfig.setGlobalSerializerConfig(globalSerializerConfig);
         }
         globalSerializerConfig.setClassName(Serializer.class.getName()).setOverrideJavaSerialization(true);
-        return config;
     }
 
     /**
