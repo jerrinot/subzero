@@ -13,7 +13,7 @@ import com.esotericsoftware.kryo.Serializer;
  * {@link UserSerializerConfig#register(Class, Serializer)} static method.
  *
  * <code>
- *      import static info.jerrinot.subzero.UserSerializer.register;
+ *      import static info.jerrinot.subzero.UserSerializerConfig.register;
  *      [...]
  *
  *      public static class MySerializer extends Serializer<MyObject> {
