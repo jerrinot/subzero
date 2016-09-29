@@ -1,5 +1,6 @@
 package info.jerrinot.subzero.internal.strategy;
 
+import info.jerrinot.subzero.internal.PropertyUserSerializer;
 import info.jerrinot.subzero.test.NonSerializableObject;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class GlobalKryoStrategyTest {
     @Test
     public void foo() throws IOException {
         NonSerializableObject joe = new NonSerializableObject("Joe");
-        GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy();
+        GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy(new PropertyUserSerializer());
         kryoStrategy.setHazelcastInstance(newMockHazelcastInstance());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

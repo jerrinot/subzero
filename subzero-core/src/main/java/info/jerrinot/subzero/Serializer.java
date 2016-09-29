@@ -5,6 +5,7 @@ import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.hazelcast.nio.serialization.StreamSerializer;
+import info.jerrinot.subzero.internal.PropertyUserSerializer;
 import info.jerrinot.subzero.internal.strategy.GlobalKryoStrategy;
 import info.jerrinot.subzero.internal.strategy.KryoStrategy;
 import info.jerrinot.subzero.internal.strategy.TypedKryoStrategy;
@@ -19,7 +20,7 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
     private KryoStrategy<T> strategy;
 
     Serializer() {
-        this.strategy = new GlobalKryoStrategy<T>();
+        this.strategy = new GlobalKryoStrategy<T>(userSerializers());
     }
 
     /**
@@ -27,7 +28,7 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
      *
      */
     public Serializer(Class<T> clazz) {
-        this.strategy = new TypedKryoStrategy<T>(clazz);
+        this.strategy = new TypedKryoStrategy<T>(clazz, userSerializers());
     }
 
     @Override
@@ -38,6 +39,10 @@ public class Serializer<T> implements StreamSerializer<T>, HazelcastInstanceAwar
     @Override
     public final T read(ObjectDataInput in) throws IOException {
         return strategy.read((InputStream) in);
+    }
+
+    public UserSerializer userSerializers() {
+        return new PropertyUserSerializer();
     }
 
     /**

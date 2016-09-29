@@ -3,15 +3,22 @@ package info.jerrinot.subzero.internal.strategy;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.hazelcast.core.HazelcastInstance;
+import info.jerrinot.subzero.UserSerializer;
 import info.jerrinot.subzero.internal.IdGeneratorUtils;
 
 public class TypedKryoStrategy<T> extends KryoStrategy<T> {
 
     private final Class<T> clazz;
+    private final UserSerializer userSerializer;
 
-    public TypedKryoStrategy(Class<T> clazz) {
+    public TypedKryoStrategy(Class<T> clazz, UserSerializer registrations) {
         this.clazz = clazz;
+        this.userSerializer = registrations;
+    }
+
+    @Override
+    public void registerCustomSerializers(Kryo kryo) {
+        userSerializer.registerSingleSerializer(kryo, clazz);
     }
 
     @Override
