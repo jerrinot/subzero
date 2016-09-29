@@ -45,8 +45,8 @@ public abstract class KryoStrategy<T> {
             MapReferenceResolver mapReferenceResolver = new MapReferenceResolver();
             DefaultStreamFactory defaultStreamFactory = new DefaultStreamFactory();
             kryo = new Kryo(classResolver, mapReferenceResolver, defaultStreamFactory);
-            registerCustomSerializers(kryo);
         }
+        registerCustomSerializers(kryo);
         kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
         return kryo;
     }
