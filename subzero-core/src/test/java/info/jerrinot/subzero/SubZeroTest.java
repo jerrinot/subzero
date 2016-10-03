@@ -8,9 +8,7 @@ import org.junit.Test;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyObject;
 
 public class SubZeroTest {
 
@@ -20,7 +18,7 @@ public class SubZeroTest {
 
         SubZero.useAsGlobalSerializer(config);
 
-        assertEquals(Serializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
+        assertEquals(GlobalSerializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
     }
 
     @Test
@@ -30,7 +28,7 @@ public class SubZeroTest {
 
         SubZero.useAsGlobalSerializer(config);
 
-        assertEquals(Serializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
+        assertEquals(GlobalSerializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
     }
 
     @Test
