@@ -18,7 +18,7 @@ public class SubZeroTest {
 
         SubZero.useAsGlobalSerializer(config);
 
-        assertEquals(GlobalSerializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
+        assertEquals(Serializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class SubZeroTest {
 
         SubZero.useAsGlobalSerializer(config);
 
-        assertEquals(GlobalSerializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
+        assertEquals(Serializer.class.getName(), config.getSerializationConfig().getGlobalSerializerConfig().getClassName());
     }
 
     @Test

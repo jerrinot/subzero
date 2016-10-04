@@ -44,7 +44,7 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
         String mapName = randomMapName();
         Config config = new Config();
 
-        SubZero.useAsGlobalSerializer(config, MyGlobalSerlizationConfig.class);
+        SubZero.useAsGlobalSerializer(config, MyGlobalUserSerlizationConfig.class);
 
         HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
         IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
@@ -87,13 +87,13 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
         assertEquals("deserialized", fromCache.name);
     }
 
-    public static class MyGlobalSerlizationConfig extends GlobalSerializer {
-        public MyGlobalSerlizationConfig() {
+    public static class MyGlobalUserSerlizationConfig extends AbstractGlobalUserSerializer {
+        public MyGlobalUserSerlizationConfig() {
             super(UserSerializerConfig.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer()));
         }
     }
 
-    public static class MySerializer extends Serializer<AnotherNonSerializableObject> {
+    public static class MySerializer extends AbstractTypeSpecificUserSerializer<AnotherNonSerializableObject> {
         public MySerializer() {
             super(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer());
         }

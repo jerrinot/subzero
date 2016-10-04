@@ -23,14 +23,14 @@ public final class SubZero {
      * Use SubZero as a global serializer.
      *
      * This method configures Hazelcast to delegate a class serialization to SubZero when the class
-     * has no explicit strategy configured. Uses {@link GlobalSerializer} serializer implementation
+     * has no explicit strategy configured. Uses {@link Serializer} serializer implementation
      * internally.
      *
      * @param config Hazelcast configuration to inject SubZero into
      * @return Hazelcast configuration.
      */
     public static Config useAsGlobalSerializer(Config config) {
-        return useAsGlobalSerializer(config, GlobalSerializer.class);
+        return useAsGlobalSerializerInternal(config, Serializer.class);
     }
 
     /**
@@ -43,7 +43,7 @@ public final class SubZero {
      * @param serializerClazz Class of global serializer implementation to use
      * @return Hazelcast configuration.
      */
-    public static <T> Config useAsGlobalSerializer(Config config, Class<? extends GlobalSerializer> serializerClazz) {
+    public static <T> Config useAsGlobalSerializer(Config config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
         SerializationConfig serializationConfig = config.getSerializationConfig();
         injectSubZero(serializationConfig, serializerClazz);
         return config;
@@ -53,7 +53,7 @@ public final class SubZero {
      * Use SubZero as a global serializer.
      *
      * This method configures Hazelcast to delegate a class serialization to SubZero when the class
-     * has no explicit strategy configured. Uses {@link GlobalSerializer} serializer implementation
+     * has no explicit strategy configured. Uses {@link Serializer} serializer implementation
      * internally.
      *
      * This method it intended to be used to configure {@link ClientConfig} instances, but
@@ -63,7 +63,7 @@ public final class SubZero {
      * @return Hazelcast configuration.
      */
     public static <T> T useAsGlobalSerializer(T config) {
-        return useAsGlobalSerializer(config, GlobalSerializer.class);
+        return useAsGlobalSerializerInternal(config, Serializer.class);
     }
 
     /**
@@ -79,7 +79,11 @@ public final class SubZero {
      * @param serializerClazz Class of global serializer implementation to use
      * @return Hazelcast configuration.
      */
-    public static <T> T useAsGlobalSerializer(T config, Class<? extends GlobalSerializer> serializerClazz) {
+    public static <T> T useAsGlobalSerializer(T config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
+        return useAsGlobalSerializer(config, serializerClazz);
+    }
+
+    private static <T> T useAsGlobalSerializerInternal(T config, Class<? extends AbstractSerializer> serializerClazz) {
         String className = config.getClass().getName();
         SerializationConfig serializationConfig;
         if (className.equals("com.hazelcast.client.config.ClientConfig")) {
@@ -95,7 +99,7 @@ public final class SubZero {
         return config;
     }
 
-    private static void injectSubZero(SerializationConfig serializationConfig, Class<? extends GlobalSerializer> serializerClazz) {
+    private static void injectSubZero(SerializationConfig serializationConfig, Class<? extends AbstractSerializer> serializerClazz) {
         GlobalSerializerConfig globalSerializerConfig = serializationConfig.getGlobalSerializerConfig();
         if (globalSerializerConfig == null) {
             globalSerializerConfig = new GlobalSerializerConfig();
