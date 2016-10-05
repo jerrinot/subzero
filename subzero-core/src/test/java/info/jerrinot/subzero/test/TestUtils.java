@@ -5,7 +5,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.internal.serialization.InternalSerializationService;
 import com.hazelcast.internal.serialization.impl.ObjectDataInputStream;
 import com.hazelcast.internal.serialization.impl.ObjectDataOutputStream;
-import info.jerrinot.subzero.AbstractSerializer;
+import com.hazelcast.nio.serialization.StreamSerializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -21,7 +21,7 @@ public class TestUtils {
         mockSerializationService = mock(InternalSerializationService.class, withSettings().stubOnly());
     }
 
-    public static <T> T serializeAndDeserializeObject(AbstractSerializer<T> serializer, T input) throws IOException {
+    public static <T> T serializeAndDeserializeObject(StreamSerializer<T> serializer, T input) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ObjectDataOutputStream odos = new ObjectDataOutputStream(os, mockSerializationService);
         serializer.write(odos, input);

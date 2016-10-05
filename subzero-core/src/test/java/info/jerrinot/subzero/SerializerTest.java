@@ -15,7 +15,7 @@ public class SerializerTest {
 
     @Test
     public void givenSingleSerializerExist_whenHazelcastInstanceIsInjected_thenTypeIdIsGreaterThenZero() {
-        AbstractSerializer serializer = new Serializer();
+        Serializer serializer = new Serializer();
         serializer.setHazelcastInstance(newMockHazelcastInstance());
 
         HazelcastInstance hz = newMockHazelcastInstance();
@@ -27,9 +27,9 @@ public class SerializerTest {
 
     @Test
     public void givenTwoSerializerExist_whenTheSameHazelcastInstanceIsInjected_thenTheyHaveDifferentTypeId() {
-        AbstractSerializer serializer1 = new Serializer();
+        Serializer serializer1 = new Serializer();
         serializer1.setHazelcastInstance(newMockHazelcastInstance());
-        AbstractSerializer serializer2 = new Serializer();
+        Serializer serializer2 = new Serializer();
         serializer2.setHazelcastInstance(newMockHazelcastInstance());
 
         HazelcastInstance hz = newMockHazelcastInstance();
@@ -43,9 +43,9 @@ public class SerializerTest {
 
     @Test
     public void givenTwoSerializerExist_whenDifferentHazelcastInstanceAreInjected_thenTheyHaveTheSameTypeId() {
-        AbstractSerializer serializer1 = new Serializer();
+        Serializer serializer1 = new Serializer();
         serializer1.setHazelcastInstance(newMockHazelcastInstance());
-        AbstractSerializer serializer2 = new Serializer();
+        Serializer serializer2 = new Serializer();
         serializer2.setHazelcastInstance(newMockHazelcastInstance());
 
         HazelcastInstance hz1 = newMockHazelcastInstance();
@@ -61,7 +61,7 @@ public class SerializerTest {
     @Test
     public void givenSpecificNeutralSerializerExist_whenObjectIsSerializedAndDeserialized_thenItHasTheSameInternalState() throws IOException {
         String input = "foo";
-        AbstractSerializer<String> serializer = new Serializer();
+        Serializer<String> serializer = new Serializer();
         serializer.setHazelcastInstance(newMockHazelcastInstance());
 
         String output = TestUtils.serializeAndDeserializeObject(serializer, input);
