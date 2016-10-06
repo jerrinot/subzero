@@ -139,7 +139,8 @@ SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
 
 
 ## Notable Contributors
-- [Ashok Koyi](https://github.com/thekalinga) reported a [first bug](https://github.com/jerrinot/subzero/issues/3) and also came up with a solution. 
+- [Ashok Koyi](https://github.com/thekalinga) reported a [first bug](https://github.com/jerrinot/subzero/issues/3) and also came up with a solution.
+- [Will Neild](https://github.com/wneild) came up with an idea to register [custom Kryo serializers](https://github.com/jerrinot/subzero/issues/6) and contributed to other parts as well.   
 
 
 ## Disclaimer
