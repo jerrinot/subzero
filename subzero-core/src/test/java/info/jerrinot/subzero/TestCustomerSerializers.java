@@ -14,7 +14,6 @@ import info.jerrinot.subzero.test.NonSerializableObjectRegisteredInDefaultConfig
 import org.junit.Before;
 import org.junit.Test;
 
-import static info.jerrinot.subzero.UserSerializerConfig.register;
 import static org.junit.Assert.assertEquals;
 
 
@@ -36,6 +35,21 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
 
         myMap.put(0, new NonSerializableObjectRegisteredInDefaultConfigFile());
         NonSerializableObjectRegisteredInDefaultConfigFile fromCache = myMap.get(0);
+
+        assertEquals("deserialized", fromCache.name);
+    }
+
+    @Test
+    public void testGlobalCustomSerializationConfiguredProgrammatically() {
+        String mapName = randomMapName();
+        Config config = new Config();
+
+        SubZero.useAsGlobalSerializer(config, MyGlobalUserSerlizationConfig.class);
+
+        HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
+        IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
+        myMap.put(0, new AnotherNonSerializableObject());
+        AnotherNonSerializableObject fromCache = myMap.get(0);
 
         assertEquals("deserialized", fromCache.name);
     }
@@ -73,14 +87,15 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
         assertEquals("deserialized", fromCache.name);
     }
 
-    public static class MySerializer extends Serializer<AnotherNonSerializableObject> {
-        public MySerializer() {
-            super(AnotherNonSerializableObject.class);
+    public static class MyGlobalUserSerlizationConfig extends AbstractGlobalUserSerializer {
+        public MyGlobalUserSerlizationConfig() {
+            super(UserSerializerConfig.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer()));
         }
+    }
 
-        @Override
-        public UserSerializer userSerializers() {
-            return register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer());
+    public static class MySerializer extends AbstractTypeSpecificUserSerializer<AnotherNonSerializableObject> {
+        public MySerializer() {
+            super(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer());
         }
     }
 

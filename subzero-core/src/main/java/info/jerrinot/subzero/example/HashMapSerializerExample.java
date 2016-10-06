@@ -1,6 +1,6 @@
 package info.jerrinot.subzero.example;
 
-import info.jerrinot.subzero.Serializer;
+import info.jerrinot.subzero.AbstractTypeSpecificUserSerializer;
 
 import java.util.HashMap;
 
@@ -19,7 +19,7 @@ import java.util.HashMap;
  * }
  * </pre>
  */
-public class HashMapSerializerExample extends Serializer<HashMap> {
+public class HashMapSerializerExample extends AbstractTypeSpecificUserSerializer<HashMap> {
 
     public HashMapSerializerExample() {
         super(HashMap.class);

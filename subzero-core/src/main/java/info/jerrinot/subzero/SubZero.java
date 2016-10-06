@@ -23,15 +23,47 @@ public final class SubZero {
      * Use SubZero as a global serializer.
      *
      * This method configures Hazelcast to delegate a class serialization to SubZero when the class
-     * has no explicit strategy configured.
+     * has no explicit strategy configured. Uses {@link Serializer} serializer implementation
+     * internally.
      *
      * @param config Hazelcast configuration to inject SubZero into
      * @return Hazelcast configuration.
      */
     public static Config useAsGlobalSerializer(Config config) {
+        return useAsGlobalSerializerInternal(config, Serializer.class);
+    }
+
+    /**
+     * Use SubZero as a global serializer.
+     *
+     * This method configures Hazelcast to delegate a class serialization to SubZero when the class
+     * has no explicit strategy configured.
+     *
+     * @param config Hazelcast configuration to inject SubZero into
+     * @param serializerClazz Class of global serializer implementation to use
+     * @return Hazelcast configuration.
+     */
+    public static <T> Config useAsGlobalSerializer(Config config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
         SerializationConfig serializationConfig = config.getSerializationConfig();
-        injectSubZero(serializationConfig);
+        injectSubZero(serializationConfig, serializerClazz);
         return config;
+    }
+
+    /**
+     * Use SubZero as a global serializer.
+     *
+     * This method configures Hazelcast to delegate a class serialization to SubZero when the class
+     * has no explicit strategy configured. Uses {@link Serializer} serializer implementation
+     * internally.
+     *
+     * This method it intended to be used to configure {@link ClientConfig} instances, but
+     * I do not want to create a hard-dependency on Hazelcast Client module.
+     *
+     * @param config Hazelcast configuration to inject SubZero into
+     * @return Hazelcast configuration.
+     */
+    public static <T> T useAsGlobalSerializer(T config) {
+        return useAsGlobalSerializerInternal(config, Serializer.class);
     }
 
     /**
@@ -44,9 +76,14 @@ public final class SubZero {
      * I do not want to create a hard-dependency on Hazelcast Client module.
      *
      * @param config Hazelcast configuration to inject SubZero into
+     * @param serializerClazz Class of global serializer implementation to use
      * @return Hazelcast configuration.
      */
-    public static <T> T useAsGlobalSerializer(T config) {
+    public static <T> T useAsGlobalSerializer(T config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
+        return useAsGlobalSerializer(config, serializerClazz);
+    }
+
+    private static <T> T useAsGlobalSerializerInternal(T config, Class<? extends AbstractSerializer> serializerClazz) {
         String className = config.getClass().getName();
         SerializationConfig serializationConfig;
         if (className.equals("com.hazelcast.client.config.ClientConfig")) {
@@ -58,17 +95,17 @@ public final class SubZero {
         } else {
             throw new IllegalArgumentException("Unknown configuration object " + config);
         }
-        injectSubZero(serializationConfig);
+        injectSubZero(serializationConfig, serializerClazz);
         return config;
     }
 
-    private static void injectSubZero(SerializationConfig serializationConfig) {
+    private static void injectSubZero(SerializationConfig serializationConfig, Class<? extends AbstractSerializer> serializerClazz) {
         GlobalSerializerConfig globalSerializerConfig = serializationConfig.getGlobalSerializerConfig();
         if (globalSerializerConfig == null) {
             globalSerializerConfig = new GlobalSerializerConfig();
             serializationConfig.setGlobalSerializerConfig(globalSerializerConfig);
         }
-        globalSerializerConfig.setClassName(Serializer.class.getName()).setOverrideJavaSerialization(true);
+        globalSerializerConfig.setClassName(serializerClazz.getName()).setOverrideJavaSerialization(true);
     }
 
     /**

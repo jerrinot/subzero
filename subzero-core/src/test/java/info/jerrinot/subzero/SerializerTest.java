@@ -58,6 +58,17 @@ public class SerializerTest {
         assertEquals(typeId1, typeId2);
     }
 
+    @Test
+    public void givenSpecificNeutralSerializerExist_whenObjectIsSerializedAndDeserialized_thenItHasTheSameInternalState() throws IOException {
+        String input = "foo";
+        Serializer<String> serializer = new Serializer();
+        serializer.setHazelcastInstance(newMockHazelcastInstance());
+
+        String output = TestUtils.serializeAndDeserializeObject(serializer, input);
+
+        assertEquals(input, output);
+    }
+
     @Test(expected = AssertionError.class)
     public void givenTwoTypeSpecificSerializersWithTheSameTypeExists_whenTheSameHazelcastInstanceIsInjected_thenTheyThrowError() {
         Serializer serializer1 = new Serializer(String.class);
@@ -87,17 +98,6 @@ public class SerializerTest {
         int typeId1 = serializer1.getTypeId();
         int typeId2 = serializer2.getTypeId();
         assertEquals(typeId1, typeId2);
-    }
-
-    @Test
-    public void givenSpecificNeutralSerializerExist_whenObjectIsSerializedAndDeserialized_thenItHasTheSameInternalState() throws IOException {
-        String input = "foo";
-        Serializer<String> serializer = new Serializer();
-        serializer.setHazelcastInstance(newMockHazelcastInstance());
-
-        String output = TestUtils.serializeAndDeserializeObject(serializer, input);
-
-        assertEquals(input, output);
     }
 
     @Test

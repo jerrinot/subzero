@@ -15,7 +15,7 @@ public class HashMapSerializerExampleTest {
         HashMapSerializerExample serializer = new HashMapSerializerExample();
         serializer.setHazelcastInstance(newMockHazelcastInstance());
 
-        HashMap<Integer, String> inputMap = new HashMap<>();
+        HashMap<Integer, String> inputMap = new HashMap<Integer, String>();
         inputMap.put(0, "Zero");
 
         HashMap deserializedMap = TestUtils.serializeAndDeserializeObject(serializer, inputMap);
