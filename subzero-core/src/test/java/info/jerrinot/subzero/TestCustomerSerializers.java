@@ -14,6 +14,10 @@ import info.jerrinot.subzero.test.NonSerializableObjectRegisteredInDefaultConfig
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -69,6 +73,34 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
     }
 
     @Test
+    public void testGlobalCustomSerializer_SpecialRegistrationRegisteredInDefaultConfigFile() {
+        String mapName = randomMapName();
+        Config config = new Config();
+
+        SubZero.useAsGlobalSerializer(config);
+        HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
+        IMap<Integer, ClassWithUnmodifieableList> myMap = member.getMap(mapName);
+        myMap.put(0, new ClassWithUnmodifieableList("foo"));
+
+        //does not throw an exception
+        myMap.get(0);
+    }
+
+    @Test
+    public void testTypedSerializer_SpecialRegistrationRegisteredInDefaultConfigFile() {
+        String mapName = randomMapName();
+        Config config = new Config();
+
+        SubZero.useForClasses(config, ClassWithUnmodifieableList.class);
+        HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
+        IMap<Integer, ClassWithUnmodifieableList> myMap = member.getMap(mapName);
+        myMap.put(0, new ClassWithUnmodifieableList("foo"));
+
+        //does not throw an exception
+        myMap.get(0);
+    }
+
+    @Test
     public void testTypedCustomSerializer_configuredBySubclassing() throws Exception {
         String mapName = randomMapName();
 
@@ -90,6 +122,18 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
     public static class MyGlobalUserSerlizationConfig extends AbstractGlobalUserSerializer {
         public MyGlobalUserSerlizationConfig() {
             super(UserSerializerConfig.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer()));
+        }
+    }
+
+    public static final class ClassWithUnmodifieableList {
+        private List<String> names;
+
+        public ClassWithUnmodifieableList(String...names) {
+            ArrayList<String> strings = new ArrayList<>(names.length);
+            for (String name : names) {
+                strings.add(name);
+            }
+            this.names = Collections.unmodifiableList(strings);
         }
     }
 
