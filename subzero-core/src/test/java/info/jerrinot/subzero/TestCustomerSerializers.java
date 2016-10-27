@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -129,11 +130,7 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
         private List<String> names;
 
         public ClassWithUnmodifieableList(String...names) {
-            ArrayList<String> strings = new ArrayList<>(names.length);
-            for (String name : names) {
-                strings.add(name);
-            }
-            this.names = Collections.unmodifiableList(strings);
+            this.names = Collections.unmodifiableList(Arrays.asList(names));
         }
     }
 

@@ -2,6 +2,7 @@ package info.jerrinot.subzero.internal;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
+import info.jerrinot.subzero.ClassFactory;
 import info.jerrinot.subzero.UserSerializer;
 
 import java.io.BufferedReader;
@@ -76,18 +77,23 @@ public final class PropertyUserSerializer implements UserSerializer {
     }
 
     private void addNewSpecialSerializer(String serializerClassName) {
-        Class serializerClass = findSpecialSerializerClass(serializerClassName);
-        Method registrationMethod = null;
+        Class serializerClass = findSerializerClass(serializerClassName);
+        Method registrationMethod;
         try {
             registrationMethod = serializerClass.getMethod("registerSerializers", Kryo.class);
         } catch (NoSuchMethodException e) {
+            String className = WellKnownClassesRepository.findDomainClassNameForWellKnownSerializer(serializerClass);
+            if (className != null) {
+                addNewSerializer(className, serializerClassName);
+                return;
+            }
             throw new IllegalStateException("Serializer " + serializerClassName
                     + " does not have expected method 'registerSerializers()': ", e);
         }
         specialSerializersRegistrationMethod.add(registrationMethod);
     }
 
-    private Class findSpecialSerializerClass(String serializerClassName) {
+    private Class findSerializerClass(String serializerClassName) {
         Class serializerClass;
         try {
             serializerClass = Class.forName(serializerClassName);
@@ -110,7 +116,13 @@ public final class PropertyUserSerializer implements UserSerializer {
     private void addNewSerializer(String domainClassName, String serializerClassName) {
         try {
             Class domainClazz = Class.forName(domainClassName);
-            Class serializerClass = Class.forName(serializerClassName);
+            if (ClassFactory.class.isAssignableFrom(domainClazz)) {
+                //special case where the domain class is not the actual class, but rather
+                //a factory to create other classes
+                ClassFactory factory = (ClassFactory) domainClazz.newInstance();
+                domainClazz = factory.createClass();
+            }
+            Class serializerClass = findSerializerClass(serializerClassName);
             Constructor constructor = serializerClass.getConstructor();
             Serializer serializer = (Serializer) constructor.newInstance();
 
@@ -130,11 +142,9 @@ public final class PropertyUserSerializer implements UserSerializer {
 
     @Override
     public void registerSingleSerializer(Kryo kryo, Class clazz) {
-        Serializer serializer = customerSerializers.get(clazz);
-        if (serializer != null) {
-            kryo.register(clazz, serializer);
-        }
-        registerSpecialSerializers(kryo);
+        //we delegate to registerAllSerializers as we always want to register all serializers found
+        //in the property file
+        registerAllSerializers(kryo);
     }
 
     @Override
