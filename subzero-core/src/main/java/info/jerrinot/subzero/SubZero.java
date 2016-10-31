@@ -43,7 +43,7 @@ public final class SubZero {
      * @param serializerClazz Class of global serializer implementation to use
      * @return Hazelcast configuration.
      */
-    public static <T> Config useAsGlobalSerializer(Config config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
+    public static Config useAsGlobalSerializer(Config config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
         SerializationConfig serializationConfig = config.getSerializationConfig();
         injectSubZero(serializationConfig, serializerClazz);
         return config;
@@ -80,7 +80,7 @@ public final class SubZero {
      * @return Hazelcast configuration.
      */
     public static <T> T useAsGlobalSerializer(T config, Class<? extends AbstractGlobalUserSerializer> serializerClazz) {
-        return useAsGlobalSerializer(config, serializerClazz);
+        return useAsGlobalSerializerInternal(config, serializerClazz);
     }
 
     private static <T> T useAsGlobalSerializerInternal(T config, Class<? extends AbstractSerializer> serializerClazz) {

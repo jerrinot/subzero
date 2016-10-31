@@ -3,6 +3,7 @@ package info.jerrinot.subzero;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.test.TestHazelcastFactory;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.SerializerConfig;
@@ -45,13 +46,32 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
     }
 
     @Test
-    public void testGlobalCustomSerializationConfiguredProgrammatically() {
+    public void testGlobalCustomSerializationConfiguredProgrammaticallyForHzConfig() {
         String mapName = randomMapName();
         Config config = new Config();
 
         SubZero.useAsGlobalSerializer(config, MyGlobalUserSerlizationConfig.class);
 
         HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
+        IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
+        myMap.put(0, new AnotherNonSerializableObject());
+        AnotherNonSerializableObject fromCache = myMap.get(0);
+
+        assertEquals("deserialized", fromCache.name);
+    }
+
+    @Test
+    public void testGlobalCustomSerializationConfiguredProgrammaticallyForClientConfig() {
+        Config memberConfig = new Config();
+        SubZero.useAsGlobalSerializer(memberConfig);
+        hazelcastFactory.newHazelcastInstance(memberConfig);
+
+        String mapName = randomMapName();
+        ClientConfig config = new ClientConfig();
+
+        SubZero.useAsGlobalSerializer(config, MyGlobalUserSerlizationConfig.class);
+
+        HazelcastInstance member = hazelcastFactory.newHazelcastClient(config);
         IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
         myMap.put(0, new AnotherNonSerializableObject());
         AnotherNonSerializableObject fromCache = myMap.get(0);
