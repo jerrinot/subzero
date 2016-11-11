@@ -80,6 +80,40 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
     }
 
     @Test
+    public void testGlobalCustomDelegateSerializationConfiguredProgrammaticallyForHzConfig() {
+        String mapName = randomMapName();
+        Config config = new Config();
+
+        SubZero.useAsGlobalSerializer(config, MyGlobalDelegateSerlizationConfig.class);
+
+        HazelcastInstance member = hazelcastFactory.newHazelcastInstance(config);
+        IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
+        myMap.put(0, new AnotherNonSerializableObject());
+        AnotherNonSerializableObject fromCache = myMap.get(0);
+
+        assertEquals("deserialized", fromCache.name);
+    }
+
+    @Test
+    public void testGlobalCustomDelegateSerializationConfiguredProgrammaticallyForClientConfig() {
+        Config memberConfig = new Config();
+        SubZero.useAsGlobalSerializer(memberConfig);
+        hazelcastFactory.newHazelcastInstance(memberConfig);
+
+        String mapName = randomMapName();
+        ClientConfig config = new ClientConfig();
+
+        SubZero.useAsGlobalSerializer(config, MyGlobalDelegateSerlizationConfig.class);
+
+        HazelcastInstance member = hazelcastFactory.newHazelcastClient(config);
+        IMap<Integer, AnotherNonSerializableObject> myMap = member.getMap(mapName);
+        myMap.put(0, new AnotherNonSerializableObject());
+        AnotherNonSerializableObject fromCache = myMap.get(0);
+
+        assertEquals("deserialized", fromCache.name);
+    }
+
+    @Test
     public void testTypedCustomSerializerRegisteredInDefaultConfigFile() throws Exception {
         String mapName = randomMapName();
         Config config = new Config();
@@ -143,6 +177,17 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
     public static class MyGlobalUserSerlizationConfig extends AbstractGlobalUserSerializer {
         public MyGlobalUserSerlizationConfig() {
             super(UserSerializerConfig.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer()));
+        }
+    }
+
+    public static class MyGlobalDelegateSerlizationConfig extends AbstractGlobalUserSerializer {
+        public MyGlobalDelegateSerlizationConfig() {
+            super(UserSerializerConfig.delegate(new DelegateKryo() {
+                @Override
+                public void accept(Kryo kryo) {
+                    kryo.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer());
+                }
+            }));
         }
     }
 

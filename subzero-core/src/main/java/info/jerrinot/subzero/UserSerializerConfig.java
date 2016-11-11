@@ -11,11 +11,20 @@ public final class UserSerializerConfig {
         return new UserSerializationBuilder(clazz, serializer);
     }
 
+    public static UserSerializationBuilder delegate(DelegateKryo delegateKryo) {
+        return new UserSerializationBuilder(delegateKryo);
+    }
+
     public final static class UserSerializationBuilder implements UserSerializer {
         private Map<Class, com.esotericsoftware.kryo.Serializer> maps = new LinkedHashMap<Class, Serializer>();
+        private DelegateKryo delegateKryo = null;
 
         private UserSerializationBuilder(Class clazz, com.esotericsoftware.kryo.Serializer serializer) {
             maps.put(clazz, serializer);
+        }
+
+        private UserSerializationBuilder(DelegateKryo delegateKryo) {
+            this.delegateKryo = delegateKryo;
         }
 
         public UserSerializationBuilder register(Class clazz, Serializer serializer) {
@@ -43,6 +52,8 @@ public final class UserSerializerConfig {
                 com.esotericsoftware.kryo.Serializer serializer = entry.getValue();
                 kryo.register(clazz, serializer);
             }
+            if (delegateKryo != null)
+                delegateKryo.accept(kryo);
         }
     }
 }
