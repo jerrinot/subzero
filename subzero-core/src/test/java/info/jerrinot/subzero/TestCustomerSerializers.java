@@ -15,7 +15,6 @@ import info.jerrinot.subzero.test.NonSerializableObjectRegisteredInDefaultConfig
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -182,9 +181,9 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
 
     public static class MyGlobalDelegateSerlizationConfig extends AbstractGlobalUserSerializer {
         public MyGlobalDelegateSerlizationConfig() {
-            super(UserSerializerConfig.delegate(new DelegateKryo() {
+            super(UserSerializerConfig.delegate(new KryoConfigurer() {
                 @Override
-                public void accept(Kryo kryo) {
+                public void configure(Kryo kryo) {
                     kryo.register(AnotherNonSerializableObject.class, new AnotherNonSerializableObjectKryoSerializer());
                 }
             }));
