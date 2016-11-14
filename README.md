@@ -119,7 +119,7 @@ Subzero expects the serializer to have a method `registerSerializers`
 which accepts an instance of `Kryo` argument as its only argument. 
 
 It's up to the serializer to register itself into Kryo. This approach
-works for most serializer from [this project](https://github.com/magro/kryo-serializers)
+works for most serializer from [this project](https://github.com/magro/kryo-serializers).
 Actually serializers from this project are considered to be well-known and it's ok to use just a classname
 without package in the property file.
 For example:
