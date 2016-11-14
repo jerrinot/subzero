@@ -103,7 +103,7 @@ and have it on a classpath of your project.
 
 SubZero expects the property file to have the following format:
 ````
-some.package.YouDomainClass=other.page.KryoSerializer
+some.package.YouDomainClass=other.package.KryoSerializer
 ````
 
 This approach works fine in most cases, but sometimes you do not know
@@ -113,7 +113,7 @@ created by a factory - think of `Collections::unmodifiableList`
 In this case it's OK to have just the Kryo serializers in property file.
 For example
 ````
-my.package.SerializerClass
+my.package.KryoSerializerClass
 ````
 Subzero expects the serializer to have a method `registerSerializers`
 which accepts an instance of `Kryo` argument as its only argument. 
