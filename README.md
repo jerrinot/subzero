@@ -111,7 +111,7 @@ domain classnames up front - for example when the class is
 created by a factory - think of `Collections::unmodifiableList`
 
 In this case it's OK to have just the Kryo serializers in property file.
-For example
+For example:
 ````
 my.package.KryoSerializerClass
 ````
@@ -120,8 +120,13 @@ which accepts an instance of `Kryo` argument as its only argument.
 
 It's up to the serializer to register itself into Kryo. This approach
 works for most serializer from [this project](https://github.com/magro/kryo-serializers)
-  
-
+Actually serializers from this project are considered to be well-known and it's ok to use just a classname
+without package in the property file.
+For example:
+````
+UnmodifiableCollectionsSerializer
+ArraysAsListSerializer
+````  
 
 ## Extensions
 SubZero aims to provide the simplest possible way to hook Kryo
