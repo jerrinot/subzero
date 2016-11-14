@@ -78,7 +78,7 @@ pom.xml and you are ready to roll!
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-all</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
 </dependency>
 ````        
 This version has all dependencies packaged inside. You can also use a 
@@ -87,7 +87,7 @@ version with regular dependencies:
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-core</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
 </dependency>
 ````
 
@@ -107,7 +107,7 @@ your cluster members have to use the same order in Hazelcast serializer
 configuration. This can be somewhat fragile. You can make it more robust
 by subclassing Serializer and returning a fixed class ID:
 ````java
-public class HashMapSerializerExample extends Serializer<HashMap> {
+public class HashMapSerializerExample extends AbstractTypeSpecificUserSerializer<HashMap> {
 
     public HashMapSerializerExample() {
         super(HashMap.class);
