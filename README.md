@@ -116,7 +116,7 @@ For example:
 my.package.KryoSerializerClass
 ````
 Subzero expects the serializer to have a method `registerSerializers`
-which accepts an instance of `Kryo` argument as its only argument. 
+which accepts an instance of `Kryo` as its only argument. 
 
 It's up to the serializer to register itself into Kryo. This approach
 works for most serializer from [this project](https://github.com/magro/kryo-serializers).
