@@ -48,6 +48,7 @@
         <java.testTarget.version>1.8</java.testTarget.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <additionalparam>-Xdoclint:none</additionalparam>
 
         <kryo.version>4.0.0</kryo.version>
         <hazelcast.version>3.7</hazelcast.version>
