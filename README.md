@@ -96,6 +96,32 @@ version with regular dependencies:
   Default value: 16KB
 - System property `subzero.base.type.id` sets base for auto-generated
   type id
+  
+## Custom Kryo Serializers
+SubZero can use customer Kryo serializers. Just create a file `subzero-serializers.properties`
+and have it on a classpath of your project. 
+
+SubZero expects the property file to have the following format:
+````
+some.package.YouDomainClass=other.page.KryoSerializer
+````
+
+This approach works fine in most cases, but sometimes you do not know
+domain classnames up front - for example when the class is 
+created by a factory - think of `Collections::unmodifiableList`
+
+In this case it's OK to have just the Kryo serializers in property file.
+For example
+````
+my.package.SerializerClass
+````
+Subzero expects the serializer to have a method `registerSerializers`
+which accepts an instance of `Kryo` argument as its only argument. 
+
+It's up to the serializer to register itself into Kryo. This approach
+works for most serializer from [this project](https://github.com/magro/kryo-serializers)
+  
+
 
 ## Extensions
 SubZero aims to provide the simplest possible way to hook Kryo
