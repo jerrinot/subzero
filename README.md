@@ -98,15 +98,17 @@ version with regular dependencies:
   type id
   
 ## Custom Kryo Serializers
-SubZero can use custom Kryo serializers. Just create a file `subzero-serializers.properties`
+SubZero can use custom Kryo serializers. 
+### Simple Case
+Just create a file `subzero-serializers.properties`
 and have it on a classpath of your project. 
 
 SubZero expects the property file to have the following format:
 ````
 some.package.YouDomainClass=other.package.KryoSerializer
 ````
-
-This approach works fine in most cases, but sometimes you do not know
+### Advanced Registration
+The simple approach works fine in most cases, but sometimes you do not know
 domain classnames up front - for example when the class is 
 created by a factory - think of `Collections::unmodifiableList`
 
