@@ -99,11 +99,9 @@ version with regular dependencies:
   
 ## Custom Kryo Serializers
 SubZero can use custom Kryo serializers. 
-### Simple Case
+### Simple Registration
 Just create a file `subzero-serializers.properties`
-and have it on a classpath of your project. 
-
-SubZero expects the property file to have the following format:
+and have it on a classpath of your project. SubZero expects the property file to have the following format:
 ````
 some.package.YouDomainClass=other.package.KryoSerializer
 ````
