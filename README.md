@@ -98,7 +98,7 @@ version with regular dependencies:
   type id
   
 ## Custom Kryo Serializers
-SubZero can use customer Kryo serializers. Just create a file `subzero-serializers.properties`
+SubZero can use custom Kryo serializers. Just create a file `subzero-serializers.properties`
 and have it on a classpath of your project. 
 
 SubZero expects the property file to have the following format:
