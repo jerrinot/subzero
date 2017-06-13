@@ -84,16 +84,17 @@ public final class SubZero {
     }
 
     private static <T> T useAsGlobalSerializerInternal(T config, Class<? extends AbstractSerializer> serializerClazz) {
-        String className = config.getClass().getName();
         SerializationConfig serializationConfig;
-        if (className.equals("com.hazelcast.client.config.ClientConfig")) {
+        try {
             ClientConfig clientConfig = (ClientConfig) config;
             serializationConfig = clientConfig.getSerializationConfig();
-        } else if (className.equals("com.hazelcast.config.Config")) {
-            Config memberConfig = (Config) config;
-            serializationConfig = memberConfig.getSerializationConfig();
-        } else {
-            throw new IllegalArgumentException("Unknown configuration object " + config);
+        } catch (ClassCastException cce1) {
+            try {
+                Config memberConfig = (Config) config;
+                serializationConfig = memberConfig.getSerializationConfig();
+            } catch (ClassCastException cce2) {
+                throw new IllegalArgumentException("Unknown configuration object " + config);
+            }
         }
         injectSubZero(serializationConfig, serializerClazz);
         return config;
