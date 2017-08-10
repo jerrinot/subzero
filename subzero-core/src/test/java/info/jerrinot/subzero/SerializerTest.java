@@ -2,6 +2,7 @@ package info.jerrinot.subzero;
 
 import com.hazelcast.core.HazelcastInstance;
 import info.jerrinot.subzero.test.TestUtils;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -109,6 +110,18 @@ public class SerializerTest {
         String output = TestUtils.serializeAndDeserializeObject(serializer, input);
 
         assertEquals(input, output);
+    }
+
+    @Test
+    public void givenJodaLocalDateIsRegisteredInProperties_whenLocalDateIsSerializedAndDeserialized_thenPrintlnDoesntThrowNPE() throws IOException {
+        LocalDate input = LocalDate.now();
+        Serializer<LocalDate> serializer = new Serializer<LocalDate>(LocalDate.class);
+        serializer.setHazelcastInstance(newMockHazelcastInstance());
+
+        LocalDate output = TestUtils.serializeAndDeserializeObject(serializer, input);
+
+        //this throw an NPE when Joda LocalDate is not registered in Kryo
+        System.out.println(output);
     }
 
 }
