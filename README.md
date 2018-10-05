@@ -96,6 +96,7 @@ version with regular dependencies:
   Default value: 16KB
 - System property `subzero.base.type.id` sets base for auto-generated
   type id
+- System property `subzero.referenceresolver.class` sets the ReferenceResolver implementation. Default value: `com.esotericsoftware.kryo.util.MapReferenceResolver`
   
 ## Custom Kryo Serializers
 SubZero can use custom Kryo serializers. 
