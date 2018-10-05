@@ -44,7 +44,7 @@ public abstract class KryoStrategy<T> {
     private Kryo newKryoInstance() {
         Kryo kryo;
         if (IGNORE_HAZELCAST_CLASSLOADER) {
-            kryo = new Kryo();
+            kryo = new Kryo(createReferenceResolver());
         } else {
             ClassLoader classLoader = ClassLoaderUtils.getConfiguredClassLoader(hazelcastInstance);
             ClassResolver classResolver = new DelegatingClassResolver(classLoader);
