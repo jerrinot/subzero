@@ -1,7 +1,7 @@
 package info.jerrinot.subzero.internal;
 
-import com.hazelcast.client.impl.HazelcastClientInstanceImpl;
-import com.hazelcast.client.impl.HazelcastClientProxy;
+import com.hazelcast.client.impl.clientside.HazelcastClientInstanceImpl;
+import com.hazelcast.client.impl.clientside.HazelcastClientProxy;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 
