@@ -158,7 +158,7 @@ public class HashMapSerializerExample extends AbstractTypeSpecificUserSerializer
 ````
 
 ## Hazelcast Compatibility
-SubZero is continuously tested with Hazelcast 3.6, 3.7 and 3.8-SNAPSHOT.
+SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11 and 3.12-SNAPSHOT.
 
 ## Further Ideas
 - More serialization strategies. Currently Kryo is the only supported
