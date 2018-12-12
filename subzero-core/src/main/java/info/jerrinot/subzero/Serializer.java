@@ -7,7 +7,7 @@ import info.jerrinot.subzero.internal.strategy.TypedKryoStrategy;
 public final class Serializer<T> extends AbstractSerializer<T> {
 
     Serializer() {
-        super(new GlobalKryoStrategy<T>(new PropertyUserSerializer()));
+        super(new GlobalKryoStrategy<T>(PropertyUserSerializer.INSTANCE));
     }
 
     /**
@@ -15,7 +15,7 @@ public final class Serializer<T> extends AbstractSerializer<T> {
      *
      */
     public Serializer(Class<T> clazz) {
-        super(new TypedKryoStrategy<T>(clazz, new PropertyUserSerializer()));
+        super(new TypedKryoStrategy<T>(clazz, PropertyUserSerializer.INSTANCE));
     }
 
 }

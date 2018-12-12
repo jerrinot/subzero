@@ -22,17 +22,31 @@ public class TestUtils {
     }
 
     public static <T> T serializeAndDeserializeObject(StreamSerializer<T> serializer, T input) throws IOException {
+        byte[] blob = serialize(serializer, input);
+        return deserialize(serializer, blob);
+    }
+
+    public static <T> byte[] serialize(StreamSerializer<T> serializer, T input) throws IOException{
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ObjectDataOutputStream odos = new ObjectDataOutputStream(os, mockSerializationService);
         serializer.write(odos, input);
-        ObjectDataInputStream odis = new ObjectDataInputStream(new ByteArrayInputStream(os.toByteArray()),
-                mockSerializationService);
+        return os.toByteArray();
+    }
+
+    public static <T> T deserialize(StreamSerializer<T> serializer, byte[] blob) throws IOException {
+        ObjectDataInputStream odis = new ObjectDataInputStream(new ByteArrayInputStream(blob), mockSerializationService);
         return serializer.read(odis);
     }
 
     public static HazelcastInstance newMockHazelcastInstance() {
+        return newMockHazelcastInstance(null);
+    }
+
+    public static HazelcastInstance newMockHazelcastInstance(ClassLoader classLoader) {
         HazelcastInstance hz = mock(HazelcastInstance.class);
-        when(hz.getConfig()).thenReturn(new Config());
+        Config config = new Config();
+        config.setClassLoader(classLoader);
+        when(hz.getConfig()).thenReturn(config);
         return hz;
     }
 }

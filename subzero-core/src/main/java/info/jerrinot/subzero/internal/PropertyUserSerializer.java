@@ -22,28 +22,38 @@ import static java.lang.System.getProperty;
 public final class PropertyUserSerializer implements UserSerializer {
     private static final String CUSTOM_CONFIG_PROPERTY_NAME = "subzero.custom.serializers.config.filename";
     private static final String DEFAULT_CONFIG_FILENAME = "subzero-serializers.properties";
+    private static final String DEFAULT_SERIALIZER_CONFIG_KEY = "defaultSerializer";
+    private static final String WELL_KNOWN_SERIALIZER_PACKAGES[] = {
+            "de.javakaffee.kryoserializers",
+            "com.esotericsoftware.kryo.serializers",
+            "info.jerrinot.subzero.relocated.com.esotericsoftware.kryo.serializers"};
 
-    private static final String WELL_KNOWN_SERIALIZER_PACKAGE = "de.javakaffee.kryoserializers";
-
-    private static final String CONFIG_FILE_NAME = getProperty(CUSTOM_CONFIG_PROPERTY_NAME, DEFAULT_CONFIG_FILENAME);
 
     private static Map<Class, Serializer> customerSerializers;
     private static Set<Method> specialSerializersRegistrationMethod;
+    private static Class<? extends Serializer> defaultSerializerClass;
 
-    public PropertyUserSerializer() {
-        if (customerSerializers != null) {
-            //custom serializers were already initialized
-            return;
-        }
+    public static final PropertyUserSerializer INSTANCE = new PropertyUserSerializer();
 
-        customerSerializers = new LinkedHashMap<Class, Serializer>();
-        specialSerializersRegistrationMethod = new LinkedHashSet<Method>();
-        initCustomSerializers();
+    private PropertyUserSerializer() {
+
     }
 
-    private void initCustomSerializers() {
+    static {
+        reinitialize();
+    }
+
+    //public for testing only
+    public static void reinitialize() {
+        customerSerializers = new LinkedHashMap<Class, Serializer>();
+        specialSerializersRegistrationMethod = new LinkedHashSet<Method>();
+        String configFilename = getProperty(CUSTOM_CONFIG_PROPERTY_NAME, DEFAULT_CONFIG_FILENAME);
+        initCustomSerializers(configFilename);
+    }
+
+    private static void initCustomSerializers(String configFilename) {
         ClassLoader classLoader = PropertyUserSerializer.class.getClassLoader();
-        InputStream configStream = classLoader.getResourceAsStream(CONFIG_FILE_NAME);
+        InputStream configStream = classLoader.getResourceAsStream(configFilename);
         if (configStream == null) {
             return;
         }
@@ -58,7 +68,7 @@ public final class PropertyUserSerializer implements UserSerializer {
         }
     }
 
-    private void readLineAndRegister(String line) {
+    private static void readLineAndRegister(String line) {
         line = line.trim();
         if (line.startsWith("#")) {
             return;
@@ -67,7 +77,11 @@ public final class PropertyUserSerializer implements UserSerializer {
         if (split.length == 2) {
             String domainClassName = split[0].trim();
             String serializerClassName = split[1].trim();
-            addNewSerializer(domainClassName, serializerClassName);
+            if (DEFAULT_SERIALIZER_CONFIG_KEY.equals(domainClassName)) {
+                defaultSerializerClass = findSerializerClass(serializerClassName);
+            } else {
+                addNewSerializer(domainClassName, serializerClassName);
+            }
         } else if (split.length == 1) {
             String serializerClass = split[0];
             addNewSpecialSerializer(serializerClass);
@@ -76,7 +90,7 @@ public final class PropertyUserSerializer implements UserSerializer {
         }
     }
 
-    private void addNewSpecialSerializer(String serializerClassName) {
+    private static void addNewSpecialSerializer(String serializerClassName) {
         Class serializerClass = findSerializerClass(serializerClassName);
         Method registrationMethod;
         try {
@@ -93,7 +107,7 @@ public final class PropertyUserSerializer implements UserSerializer {
         specialSerializersRegistrationMethod.add(registrationMethod);
     }
 
-    private Class findSerializerClass(String serializerClassName) {
+    private static Class findSerializerClass(String serializerClassName) {
         Class serializerClass;
         try {
             serializerClass = Class.forName(serializerClassName);
@@ -101,19 +115,21 @@ public final class PropertyUserSerializer implements UserSerializer {
         } catch (ClassNotFoundException e) {
             //ok, let's try to find prefix a well known package
             if (serializerClassName.indexOf('.') == -1) {
-                String enrichedSerializerClassName = WELL_KNOWN_SERIALIZER_PACKAGE + "." + serializerClassName;
-                try {
-                    serializerClass = Class.forName(enrichedSerializerClassName);
-                    return serializerClass;
-                } catch (ClassNotFoundException e1) {
-                    //ignored, we will throw
+                for (String wellKnownPackage : WELL_KNOWN_SERIALIZER_PACKAGES) {
+                    String enrichedSerializerClassName = wellKnownPackage + "." + serializerClassName;
+                    try {
+                        serializerClass = Class.forName(enrichedSerializerClassName);
+                        return serializerClass;
+                    } catch (ClassNotFoundException e1) {
+                        //ignored, we will throw IllegalStateException bellow
+                    }
                 }
             }
             throw new IllegalStateException("Serializer " + serializerClassName + " not found", e);
         }
     }
 
-    private void addNewSerializer(String domainClassName, String serializerClassName) {
+    private static void addNewSerializer(String domainClassName, String serializerClassName) {
         try {
             Class domainClazz = Class.forName(domainClassName);
             if (ClassFactory.class.isAssignableFrom(domainClazz)) {
@@ -155,6 +171,9 @@ public final class PropertyUserSerializer implements UserSerializer {
             kryo.register(clazz, serializer);
         }
         registerSpecialSerializers(kryo);
+        if (defaultSerializerClass != null) {
+            kryo.setDefaultSerializer(defaultSerializerClass);
+        }
     }
 
     private void registerSpecialSerializers(Kryo kryo) {
