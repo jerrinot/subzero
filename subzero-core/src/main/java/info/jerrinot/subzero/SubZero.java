@@ -84,6 +84,12 @@ public final class SubZero {
     }
 
     private static <T> T useAsGlobalSerializerInternal(T config, Class<? extends AbstractSerializer> serializerClazz) {
+        SerializationConfig serializationConfig = extractSerializationConfig(config);
+        injectSubZero(serializationConfig, serializerClazz);
+        return config;
+    }
+
+    private static SerializationConfig extractSerializationConfig(Object config) {
         String className = config.getClass().getName();
         SerializationConfig serializationConfig;
         if (className.equals("com.hazelcast.client.config.ClientConfig")) {
@@ -95,8 +101,7 @@ public final class SubZero {
         } else {
             throw new IllegalArgumentException("Unknown configuration object " + config);
         }
-        injectSubZero(serializationConfig, serializerClazz);
-        return config;
+        return serializationConfig;
     }
 
     private static void injectSubZero(SerializationConfig serializationConfig, Class<? extends AbstractSerializer> serializerClazz) {
@@ -116,7 +121,25 @@ public final class SubZero {
      * @return Hazelcast configuration
      */
     public static Config useForClasses(Config config, Class<?>...classes) {
-        SerializationConfig serializationConfig = config.getSerializationConfig();
+        return useForClassesInternal(config, classes);
+    }
+
+    /**
+     * Use SubZero as a serializer for selected classes only.
+     *
+     * This method it intended to be used to configure {@link ClientConfig} instances, but
+     * I do not want to create a hard-dependency on Hazelcast Client module.
+     *
+     * @param config Hazelcast configuration to inject SubZero into
+     * @param classes classes Hazelcast should serialize via SubZero
+     * @return Hazelcast configuration
+     */
+    public static <T> T useForClasses(T config, Class<?>...classes) {
+        return useForClassesInternal(config, classes);
+    }
+
+    private static <T> T useForClassesInternal(T config, Class<?>...classes) {
+        SerializationConfig serializationConfig = extractSerializationConfig(config);
         for (Class<?> clazz : classes) {
             SerializerConfig serializerConfig = new SerializerConfig();
             Serializer<?> serializer = new Serializer(clazz);
