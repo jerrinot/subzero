@@ -1,9 +1,11 @@
 package info.jerrinot.subzero.internal;
 
-import com.hazelcast.client.impl.HazelcastClientInstanceImpl;
-import com.hazelcast.client.impl.HazelcastClientProxy;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ClassLoaderUtils {
     private static final boolean DEBUG_CLASSLOADING = Boolean.getBoolean("subzero.debug.classloading");
@@ -25,12 +27,16 @@ public class ClassLoaderUtils {
             return config.getClassLoader();
         } catch (UnsupportedOperationException e) {
             //ok, this is a client instance -> it does not support getConfig()
-            if (hz instanceof HazelcastClientInstanceImpl) {
-                HazelcastClientInstanceImpl client = (HazelcastClientInstanceImpl)hz;
-                return client.getClientConfig().getClassLoader();
-            } else {
-                HazelcastClientProxy client = (HazelcastClientProxy)hz;
-                return client.getClientConfig().getClassLoader();
+            try {
+                Method getClientConfigMethod = hz.getClass().getMethod("getClientConfig");
+                ClientConfig clientConfig = (ClientConfig) getClientConfigMethod.invoke(hz);
+                return clientConfig.getClassLoader();
+            } catch (NoSuchMethodException e1) {
+                throw new IllegalArgumentException("Unknown instance object " + hz, e1);
+            } catch (IllegalAccessException e1) {
+                throw new IllegalArgumentException("Unknown instance object " + hz, e1);
+            } catch (InvocationTargetException e1) {
+                throw new IllegalArgumentException("Unknown instance object " + hz, e1);
             }
         }
     }
