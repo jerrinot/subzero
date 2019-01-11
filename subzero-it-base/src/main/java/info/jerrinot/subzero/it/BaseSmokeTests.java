@@ -12,16 +12,26 @@ import com.hazelcast.nio.serialization.HazelcastSerializationException;
 import com.hazelcast.test.HazelcastTestSupport;
 import com.hazelcast.util.function.Consumer;
 import info.jerrinot.subzero.Serializer;
+import info.jerrinot.subzero.SubZero;
+import info.jerrinot.subzero.SubzeroConfigRule;
+import info.jerrinot.subzero.internal.ClassLoaderUtils;
+import info.jerrinot.subzero.internal.PropertyUserSerializer;
+import info.jerrinot.subzero.test.TestUtils;
+import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import org.junit.After;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.hazelcast.config.InMemoryFormat.OBJECT;
 import static info.jerrinot.subzero.SubZero.useAsGlobalSerializer;
 import static info.jerrinot.subzero.SubZero.useForClasses;
+import static info.jerrinot.subzero.SubzeroConfigRule.useConfig;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
@@ -40,6 +50,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
                 {true},
         });
     }
+
+    @Rule
+    public SubzeroConfigRule configRule = useConfig("subzero-serializers.properties");
 
     @After
     public void tearDown() {
@@ -104,6 +117,54 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
         });
 
         executeTest(instances);
+    }
+
+    @Test
+    public void testCompat() throws Exception {
+        configRule.reconfigure("compatible-field-default-serializer.properties");
+
+        final String classname = "some.pckage.SyntheticPerson";
+        final String constantField = "firstname";
+        String expectedFirstname = "somename";
+        String mapName = randomMapName();
+
+        final AtomicInteger instanceCounter = new AtomicInteger();
+        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+            @Override
+            public void accept(Object configurationObject) {
+                int extraFieldCount = instanceCounter.incrementAndGet();
+                int totalFieldCount = 1 + extraFieldCount;
+                String fields[] = new String[totalFieldCount];
+                fields[0] = constantField;
+                for (int i = 1; i < fields.length; i++) {
+                    fields[i] = "extrafield" + i;
+                }
+                ByteArrayClassLoader classLoader = TestUtils.createClass(classname, fields);
+
+                if (configurationObject instanceof Config) {
+                    Config config = (Config) configurationObject;
+                    config.getMapConfig("default").setInMemoryFormat(OBJECT);
+                    config.setClassLoader(classLoader);
+                } else if (configurationObject instanceof ClientConfig) {
+                    ((ClientConfig) configurationObject).setClassLoader(classLoader);
+                }
+                SubZero.useAsGlobalSerializer(configurationObject);
+            }
+        });
+
+        HazelcastInstance i0 = instances[0];
+        IMap<Integer, Object> map0 = i0.getMap(mapName);
+        ClassLoader cl0 = ClassLoaderUtils.getConfiguredClassLoader(i0);
+        Object o1 = cl0.loadClass(classname).newInstance();
+        o1.getClass().getField(constantField).set(o1, expectedFirstname);
+        map0.put(0, o1);
+
+        HazelcastInstance i1 = instances[1];
+        IMap<Integer, Object> map1 = i1.getMap(mapName);
+        Object o = map1.get(0);
+
+        String actualFirstname = (String) o.getClass().getField(constantField).get(o);
+        assertEquals(expectedFirstname, actualFirstname);
     }
 
     private void executeTest(HazelcastInstance[] instances) {

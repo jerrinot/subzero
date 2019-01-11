@@ -53,6 +53,19 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${bytebuddy.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>info.jerrinot</groupId>
+            <artifactId>subzero-core</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+        </dependency>
     </dependencies>
 
     <build>

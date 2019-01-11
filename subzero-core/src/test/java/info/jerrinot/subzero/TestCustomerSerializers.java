@@ -12,18 +12,24 @@ import com.hazelcast.core.IMap;
 import com.hazelcast.test.HazelcastTestSupport;
 import info.jerrinot.subzero.test.AnotherNonSerializableObject;
 import info.jerrinot.subzero.test.NonSerializableObjectRegisteredInDefaultConfigFile;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static info.jerrinot.subzero.SubzeroConfigRule.useConfig;
 import static org.junit.Assert.assertEquals;
 
 
 public class TestCustomerSerializers extends HazelcastTestSupport {
     private TestHazelcastFactory hazelcastFactory;
+
+    @Rule
+    public SubzeroConfigRule configRule = useConfig("test-subzero-serializers.properties");
 
     @Before
     public void setUp() {

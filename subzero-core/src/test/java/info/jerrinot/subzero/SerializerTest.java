@@ -11,6 +11,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import org.joda.time.LocalDate;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static info.jerrinot.subzero.SubzeroConfigRule.useConfig;
 import static info.jerrinot.subzero.test.TestUtils.newMockHazelcastInstance;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -25,11 +27,8 @@ import static org.junit.Assert.assertTrue;
 
 public class SerializerTest {
 
-    @After
-    public void tearDown() {
-        System.clearProperty("subzero.custom.serializers.config.filename");
-        PropertyUserSerializer.reinitialize();
-    }
+    @Rule
+    public SubzeroConfigRule configRule = useConfig("test-subzero-serializers.properties");
 
     @Test
     public void givenSingleSerializerExist_whenHazelcastInstanceIsInjected_thenTypeIdIsGreaterThenZero() {
@@ -161,12 +160,12 @@ public class SerializerTest {
         String expectedFirstname = "somename";
 
         //v1 class has just a single field: firstname
-        ByteArrayClassLoader v1classLoader = createClass(classname, v1Field);
+        ByteArrayClassLoader v1classLoader = TestUtils.createClass(classname, v1Field);
         Serializer<Object> serializerV1 = new Serializer<Object>((Class<Object>) v1classLoader.loadClass(classname));
         serializerV1.setHazelcastInstance(newMockHazelcastInstance(v1classLoader));
 
         //v2 class has two fields - the default Kryo serializer is not deserialize it
-        ByteArrayClassLoader v2classLoader = createClass(classname, v2Fields);
+        ByteArrayClassLoader v2classLoader = TestUtils.createClass(classname, v2Fields);
         Serializer<Object> serializerV2 = new Serializer<Object>((Class<Object>) v2classLoader.loadClass(classname));
         serializerV2.setHazelcastInstance(newMockHazelcastInstance(v2classLoader));
 
@@ -178,20 +177,6 @@ public class SerializerTest {
         String actualFirstname = (String) v2Instance.getClass().getField(v1Field).get(v2Instance);
 
         assertEquals(expectedFirstname, actualFirstname);
-    }
-
-    private ByteArrayClassLoader createClass(String classname, String...fields) {
-        DynamicType.Builder<Object> byteBuddy = new ByteBuddy(ClassFileVersion.JAVA_V6)
-                .subclass(Object.class)
-                .name(classname)
-                .modifiers(Visibility.PUBLIC);
-        for (String field : fields) {
-            byteBuddy = byteBuddy.defineField(field, String.class, Visibility.PUBLIC);
-        }
-        byte[] bytes = byteBuddy.make().getBytes();
-        Map<String, byte[]> typeDefinitions = new HashMap<String, byte[]>();
-        typeDefinitions.put(classname, bytes);
-        return new ByteArrayClassLoader(SerializerTest.class.getClassLoader(), typeDefinitions);
     }
 
 }
