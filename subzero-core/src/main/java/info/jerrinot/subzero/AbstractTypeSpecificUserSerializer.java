@@ -39,6 +39,6 @@ public abstract class AbstractTypeSpecificUserSerializer<T> extends AbstractSeri
      *
      */
     public AbstractTypeSpecificUserSerializer(Class<T> clazz) {
-        super(new TypedKryoStrategy<T>(clazz, new PropertyUserSerializer()));
+        super(new TypedKryoStrategy<T>(clazz, PropertyUserSerializer.INSTANCE));
     }
 }

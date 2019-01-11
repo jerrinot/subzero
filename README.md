@@ -91,7 +91,7 @@ version with regular dependencies:
 </dependency>
 ````
 
-## Configuration
+## Configuration Options
 - System property `subzero.buffer.size.kb` sets buffer size for Kryo.
   Default value: 16KB
 - System property `subzero.base.type.id` sets base for auto-generated
@@ -128,6 +128,22 @@ For example:
 UnmodifiableCollectionsSerializer
 ArraysAsListSerializer
 ````  
+
+### Default Kryo Serializer
+Kryo uses [FieldSerializer](https://github.com/EsotericSoftware/kryo/blob/498cd2b9765d3af8c77d3c4b1ede993fe3dd45a7/src/com/esotericsoftware/kryo/serializers/FieldSerializer.java) 
+by default. Sometimes you want to change it. 
+
+For example when you want support adding new fields then you have to use [CompatibleFieldSerializer](https://github.com/EsotericSoftware/kryo/blob/498cd2b9765d3af8c77d3c4b1ede993fe3dd45a7/src/com/esotericsoftware/kryo/serializers/CompatibleFieldSerializer.java).
+You can do this by using the key `defaultSerializer` in the property file.
+
+Example:
+`defaultSerializer=com.esotericsoftware.kryo.serializers.CompatibleFieldSerializer`
+
+This mechanism also understands the concept of well-known packages: 
+Serializers from the Kryo project itself and [Magro serializers](https://github.com/magro/kryo-serializer) 
+can be referenced just by a simple classname, no need to specify package. This is handy
+when using the Subzero-all version which has the Kryo serializers relocated into
+another package. 
 
 ## Extensions
 SubZero aims to provide the simplest possible way to hook Kryo

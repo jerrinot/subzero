@@ -16,7 +16,7 @@ public class GlobalKryoStrategyTest {
     @Test
     public void foo() throws IOException {
         NonSerializableObject joe = new NonSerializableObject("Joe");
-        GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy(new PropertyUserSerializer());
+        GlobalKryoStrategy kryoStrategy = new GlobalKryoStrategy(PropertyUserSerializer.INSTANCE);
         kryoStrategy.setHazelcastInstance(newMockHazelcastInstance());
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
