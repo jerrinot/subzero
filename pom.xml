@@ -50,7 +50,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <additionalparam>-Xdoclint:none</additionalparam>
 
-        <kryo.version>4.0.0</kryo.version>
+        <kryo.version>4.0.2</kryo.version>
         <hazelcast.version>3.7</hazelcast.version>
 
         <junit.version>4.12</junit.version>
