@@ -74,6 +74,7 @@
                 <module>subzero-all-it-hz310</module>
                 <module>subzero-all-it-hz311</module>
                 <module>subzero-all-it-hz312</module>
+                <module>subzero-all-it-hz40</module>
             </modules>
         </profile>
 
