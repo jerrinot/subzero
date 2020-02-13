@@ -19,6 +19,12 @@
             <artifactId>subzero-it-base</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.hazelcast</groupId>
+                    <artifactId>hazelcast-client</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
