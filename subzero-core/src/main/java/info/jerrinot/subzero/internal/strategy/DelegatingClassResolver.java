@@ -1,7 +1,9 @@
 package info.jerrinot.subzero.internal.strategy;
 
 import com.esotericsoftware.kryo.util.DefaultClassResolver;
-import com.hazelcast.nio.ClassLoaderUtil;
+import info.jerrinot.subzero.internal.ClassLoaderUtils;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * Delegates class loading to Hazelcast -> SubZero will use the same strategy
@@ -19,9 +21,15 @@ final class DelegatingClassResolver extends DefaultClassResolver {
     @Override
     protected Class<?> getTypeByName(String className) {
         try {
-            return ClassLoaderUtil.loadClass(classLoader, className);
-        } catch (ClassNotFoundException e) {
-            return null;
+            return ClassLoaderUtils.loadClass(className, classLoader);
+        } catch (InvocationTargetException e) {
+            if (e.getCause() instanceof ClassNotFoundException) {
+                return null;
+            }
+            throw new IllegalStateException(e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalStateException(e);
         }
     }
+
 }
