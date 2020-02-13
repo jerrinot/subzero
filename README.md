@@ -66,10 +66,7 @@ HazelcastInstance hz = Hazelcast.newHazelcastInstance(config);
 ````
 
 All cluster members have to use SubZero for the same types and the types
-have to be declared in the same order. As of Hazelcast 3.7 programmatic 
-configuration will result in somewhat higher performance - this is given
-by a limitation of Hazelcast declarative configuration API. It should be 
-fixed Hazelcast 3.8
+have to be declared in the same order. 
 
 ## Maven Coordinates
 SubZero is available in Maven Central. Just insert this snippet into 
@@ -174,7 +171,7 @@ public class HashMapSerializerExample extends AbstractTypeSpecificUserSerializer
 ````
 
 ## Hazelcast Compatibility
-SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11 and 3.12-SNAPSHOT.
+SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12 and 4.0
 
 ## Further Ideas
 - More serialization strategies. Currently Kryo is the only supported
@@ -189,7 +186,8 @@ SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11 and
 ## Notable Contributors
 - [Ashok Koyi](https://github.com/thekalinga) reported a [first bug](https://github.com/jerrinot/subzero/issues/3) and also came up with a solution.
 - [Will Neild](https://github.com/wneild) came up with an idea to register [custom Kryo serializers](https://github.com/jerrinot/subzero/issues/6) and contributed to other parts as well.   
-- [Adrian](https://github.com/acieplak) contributed support for [custom reference resolvers](https://github.com/jerrinot/subzero/pull/25). 
+- [Adrian](https://github.com/acieplak) contributed support for [custom reference resolvers](https://github.com/jerrinot/subzero/pull/25).
+- [Tomasz Gawęda](https://github.com/TomaszGaweda) for [Hazelcast 4.x compatibility](https://github.com/jerrinot/subzero/pull/40).
 
 
 ## Disclaimer
