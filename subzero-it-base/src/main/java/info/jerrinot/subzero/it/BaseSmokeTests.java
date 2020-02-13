@@ -7,15 +7,12 @@ import com.hazelcast.config.GlobalSerializerConfig;
 import com.hazelcast.config.SerializationConfig;
 import com.hazelcast.config.SerializerConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
 import com.hazelcast.nio.serialization.HazelcastSerializationException;
 import com.hazelcast.test.HazelcastTestSupport;
-import com.hazelcast.util.function.Consumer;
 import info.jerrinot.subzero.Serializer;
 import info.jerrinot.subzero.SubZero;
 import info.jerrinot.subzero.SubzeroConfigRule;
 import info.jerrinot.subzero.internal.ClassLoaderUtils;
-import info.jerrinot.subzero.internal.PropertyUserSerializer;
 import info.jerrinot.subzero.test.TestUtils;
 import net.bytebuddy.dynamic.loading.ByteArrayClassLoader;
 import org.junit.After;
@@ -32,6 +29,7 @@ import static com.hazelcast.config.InMemoryFormat.OBJECT;
 import static info.jerrinot.subzero.SubZero.useAsGlobalSerializer;
 import static info.jerrinot.subzero.SubZero.useForClasses;
 import static info.jerrinot.subzero.SubzeroConfigRule.useConfig;
+import static info.jerrinot.subzero.it.MapProxy.newProxy;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
@@ -63,9 +61,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
     public void testInfrastructure() {
         //make sure the test fails when Subzero is not enabled
 
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object o) {
+            public void configure(Object o) {
                 //intentionally empty
             }
         });
@@ -74,9 +72,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
 
     @Test
     public void testGlobalSerializer() {
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object configurationObject) {
+            public void configure(Object configurationObject) {
                 SerializationConfig serializationConfig = extractSerializationConfig(configurationObject);
                 configureGlobalConfig(serializationConfig);
             }
@@ -86,9 +84,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
 
     @Test
     public void testTypedSerializer() {
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object configurationObject) {
+            public void configure(Object configurationObject) {
                 SerializationConfig serializationConfig = extractSerializationConfig(configurationObject);
                 configureTypedConfig(serializationConfig);
             }
@@ -98,9 +96,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
 
     @Test
     public void testTypedSerializer_withInjector() {
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object configurationObject) {
+            public void configure(Object configurationObject) {
                 useForClasses(configurationObject, Person.class);
             }
         });
@@ -109,9 +107,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
 
     @Test
     public void testGlobalSerializer_withInjector() {
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object configurationObject) {
+            public void configure(Object configurationObject) {
                 useAsGlobalSerializer(configurationObject);
             }
         });
@@ -129,9 +127,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
         String mapName = randomMapName();
 
         final AtomicInteger instanceCounter = new AtomicInteger();
-        HazelcastInstance[] instances = createInstances(new Consumer<Object>() {
+        HazelcastInstance[] instances = createInstances(new Configurer() {
             @Override
-            public void accept(Object configurationObject) {
+            public void configure(Object configurationObject) {
                 int extraFieldCount = instanceCounter.incrementAndGet();
                 int totalFieldCount = 1 + extraFieldCount;
                 String fields[] = new String[totalFieldCount];
@@ -153,14 +151,14 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
         });
 
         HazelcastInstance i0 = instances[0];
-        IMap<Integer, Object> map0 = i0.getMap(mapName);
+        MapProxy<Integer, Object> map0 = newProxy(i0, mapName);
         ClassLoader cl0 = ClassLoaderUtils.getConfiguredClassLoader(i0);
         Object o1 = cl0.loadClass(classname).newInstance();
         o1.getClass().getField(constantField).set(o1, expectedFirstname);
-        map0.put(0, o1);
+        map0.set(0, o1);
 
         HazelcastInstance i1 = instances[1];
-        IMap<Integer, Object> map1 = i1.getMap(mapName);
+        MapProxy<Integer, Object> map1 = newProxy(i1, mapName);
         Object o = map1.get(0);
 
         String actualFirstname = (String) o.getClass().getField(constantField).get(o);
@@ -168,9 +166,9 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
     }
 
     private void executeTest(HazelcastInstance[] instances) {
-        IMap<Integer, Person> map = instances[0].getMap("myMap");
+        MapProxy<Integer, Person> map = newProxy(instances[0], "myMap");
         Person joe = new Person("Joe");
-        map.put(0, joe);
+        map.set(0, joe);
 
         assertEquals(joe, map.get(0));
     }
@@ -185,18 +183,18 @@ public abstract class BaseSmokeTests extends HazelcastTestSupport {
         }
     }
 
-    private HazelcastInstance[] createInstances(Consumer<Object> configurationConsumer) {
+    private HazelcastInstance[] createInstances(Configurer configurer) {
         int totalInstanceCount = useClient ? CLUSTER_SIZE + 1 : CLUSTER_SIZE;
         HazelcastInstance[] instances = new HazelcastInstance[totalInstanceCount];
 
         for (int i = useClient ? 1 : 0; i < totalInstanceCount; i++) {
             Config config = new Config();
-            configurationConsumer.accept(config);
+            configurer.configure(config);
             instances[i] = factory.newHazelcastInstance(config);
         }
         if (useClient) {
             ClientConfig config = new ClientConfig();
-            configurationConsumer.accept(config);
+            configurer.configure(config);
             instances[0] = factory.newHazelcastClient(config);
         }
         return instances;
