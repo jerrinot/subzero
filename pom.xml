@@ -14,6 +14,7 @@
     <modules>
         <module>subzero-core</module>
         <module>subzero-all</module>
+        <module>subzero-all-it-hz50</module>
     </modules>
 
     <name>SubZero</name>
@@ -42,8 +43,8 @@
     </scm>
 
     <properties>
-        <java.source.version>1.6</java.source.version>
-        <java.target.version>1.6</java.target.version>
+        <java.source.version>1.8</java.source.version>
+        <java.target.version>1.8</java.target.version>
         <java.testSource.version>1.8</java.testSource.version>
         <java.testTarget.version>1.8</java.testTarget.version>
 
@@ -75,6 +76,7 @@
                 <module>subzero-all-it-hz311</module>
                 <module>subzero-all-it-hz312</module>
                 <module>subzero-all-it-hz40</module>
+                <module>subzero-all-it-hz50</module>
             </modules>
         </profile>
 
@@ -187,7 +189,7 @@
                     <configuration>
                         <signature>
                             <groupId>org.codehaus.mojo.signature</groupId>
-                            <artifactId>java16</artifactId>
+                            <artifactId>java18</artifactId>
                             <version>1.0</version>
                         </signature>
                     </configuration>

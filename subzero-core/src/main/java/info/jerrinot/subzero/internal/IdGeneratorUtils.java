@@ -2,11 +2,9 @@ package info.jerrinot.subzero.internal;
 
 import com.hazelcast.core.HazelcastInstance;
 
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import static java.util.Collections.newSetFromMap;
 
 public class IdGeneratorUtils {
     private static final int BASE_ID = Integer.getInteger("subzero.base.type.id", 6000);
@@ -14,14 +12,14 @@ public class IdGeneratorUtils {
     private static ConcurrentHashMap<HazelcastInstance, IdSequence> counterMap =
             new ConcurrentHashMap<HazelcastInstance, IdSequence>();
 
-    public static int newIdForType(HazelcastInstance hz, Class<?> type) {
+    public static int idForType(HazelcastInstance hz, Class<?> type) {
         IdSequence idSequence = getOrCreateSequence(hz);
-        return idSequence.newIdFor(type);
+        return idSequence.idFor(type);
     }
 
-    public static int newId(HazelcastInstance hz) {
+    public static int globalId(HazelcastInstance hz) {
         IdSequence idSequence = getOrCreateSequence(hz);
-        return idSequence.newId();
+        return idSequence.idFor(hz.getClass());
     }
 
     public static void instanceDestroyed(HazelcastInstance hz) {
@@ -39,19 +37,11 @@ public class IdGeneratorUtils {
     }
 
     private static class IdSequence {
-        private Set<Class<?>> knownTypes = newSetFromMap(new ConcurrentHashMap<Class<?>, Boolean>());
-        private AtomicInteger counter = new AtomicInteger(BASE_ID);
+        private final ConcurrentMap<Class<?>, Integer> knownTypes = new ConcurrentHashMap<>();
+        private final AtomicInteger counter = new AtomicInteger(BASE_ID);
 
-        private int newIdFor(Class<?> clazz) {
-            boolean added = knownTypes.add(clazz);
-            if (!added) {
-                throw new AssertionError("A serializer for " + clazz + " has been configured twice");
-            }
-            return counter.getAndIncrement();
-        }
-
-        private int newId() {
-            return counter.getAndIncrement();
+        private int idFor(Class<?> clazz) {
+            return knownTypes.computeIfAbsent(clazz, (ignored) -> counter.incrementAndGet());
         }
     }
 }

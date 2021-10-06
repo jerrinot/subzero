@@ -43,22 +43,6 @@ public class SerializerTest {
     }
 
     @Test
-    public void givenTwoSerializerExist_whenTheSameHazelcastInstanceIsInjected_thenTheyHaveDifferentTypeId() {
-        Serializer serializer1 = new Serializer();
-        serializer1.setHazelcastInstance(newMockHazelcastInstance());
-        Serializer serializer2 = new Serializer();
-        serializer2.setHazelcastInstance(newMockHazelcastInstance());
-
-        HazelcastInstance hz = newMockHazelcastInstance();
-        serializer1.setHazelcastInstance(hz);
-        serializer2.setHazelcastInstance(hz);
-
-        int typeId1 = serializer1.getTypeId();
-        int typeId2 = serializer2.getTypeId();
-        assertNotEquals(typeId1, typeId2);
-    }
-
-    @Test
     public void givenTwoSerializerExist_whenDifferentHazelcastInstanceAreInjected_thenTheyHaveTheSameTypeId() {
         Serializer serializer1 = new Serializer();
         serializer1.setHazelcastInstance(newMockHazelcastInstance());
@@ -84,19 +68,6 @@ public class SerializerTest {
         String output = TestUtils.serializeAndDeserializeObject(serializer, input);
 
         assertEquals(input, output);
-    }
-
-    @Test(expected = AssertionError.class)
-    public void givenTwoTypeSpecificSerializersWithTheSameTypeExists_whenTheSameHazelcastInstanceIsInjected_thenTheyThrowError() {
-        Serializer serializer1 = new Serializer(String.class);
-        serializer1.setHazelcastInstance(newMockHazelcastInstance());
-
-        Serializer serializer2 = new Serializer(String.class);
-        serializer2.setHazelcastInstance(newMockHazelcastInstance());
-
-        HazelcastInstance hz = newMockHazelcastInstance();
-        serializer1.setHazelcastInstance(hz);
-        serializer2.setHazelcastInstance(hz);
     }
 
     @Test
