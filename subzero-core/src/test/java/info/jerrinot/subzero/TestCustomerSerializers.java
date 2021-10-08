@@ -218,7 +218,7 @@ public class TestCustomerSerializers extends HazelcastTestSupport {
         }
 
         @Override
-        public AnotherNonSerializableObject read(Kryo kryo, Input input, Class<AnotherNonSerializableObject> type) {
+        public AnotherNonSerializableObject read(Kryo kryo, Input input, Class<? extends AnotherNonSerializableObject> type) {
             AnotherNonSerializableObject object = new AnotherNonSerializableObject();
             object.name = "deserialized";
             return object;

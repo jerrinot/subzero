@@ -3,12 +3,11 @@ package info.jerrinot.subzero.internal.strategy;
 import com.esotericsoftware.kryo.ClassResolver;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.ReferenceResolver;
-import com.esotericsoftware.kryo.StreamFactory;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.InputChunked;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.io.OutputChunked;
-import com.esotericsoftware.kryo.util.DefaultStreamFactory;
+import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
 import com.hazelcast.core.HazelcastInstance;
 import info.jerrinot.subzero.internal.ClassLoaderUtils;
 import info.jerrinot.subzero.internal.IdGeneratorUtils;
@@ -45,15 +44,16 @@ public abstract class KryoStrategy<T> {
         Kryo kryo;
         if (IGNORE_HAZELCAST_CLASSLOADER) {
             kryo = new Kryo(createReferenceResolver());
+            kryo.setRegistrationRequired(false);
         } else {
             ClassLoader classLoader = ClassLoaderUtils.getConfiguredClassLoader(hazelcastInstance);
             ClassResolver classResolver = new DelegatingClassResolver(classLoader);
             ReferenceResolver referenceResolver = createReferenceResolver();
-            StreamFactory defaultStreamFactory = new DefaultStreamFactory();
-            kryo = new Kryo(classResolver, referenceResolver, defaultStreamFactory);
+            kryo = new Kryo(classResolver, referenceResolver);
         }
         registerCustomSerializers(kryo);
-        kryo.setInstantiatorStrategy(new Kryo.DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+        kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+        kryo.setRegistrationRequired(false);
         return kryo;
     }
 
@@ -72,7 +72,7 @@ public abstract class KryoStrategy<T> {
         OutputChunked output = kryoContext.getOutputChunked();
         output.setOutputStream(out);
         writeObject(kryoContext.getKryo(), output, object);
-        output.endChunks();
+        output.endChunk();
         output.flush();
     }
 

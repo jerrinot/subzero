@@ -2,8 +2,7 @@ package info.jerrinot.subzero.internal;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.factories.ReflectionSerializerFactory;
-import com.esotericsoftware.kryo.factories.SerializerFactory;
+import com.esotericsoftware.kryo.SerializerFactory;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 import info.jerrinot.subzero.ClassFactory;
 import info.jerrinot.subzero.SerializerConfigurer;
@@ -207,7 +206,7 @@ public final class PropertyUserSerializer implements UserSerializer {
                     ? FieldSerializer.class
                     : defaultSerializerClass;
 
-            SerializerFactory serializerFactory = new ReflectionSerializerFactory(serializerClass);
+            SerializerFactory serializerFactory = new SerializerFactory.ReflectionSerializerFactory(serializerClass);
             if (!serializerConfigurers.isEmpty()) {
                 SerializerConfigurer configurer = serializerConfigurers.get(0);
                 serializerFactory = new PostProcessingSerializerFactory(serializerFactory, configurer);

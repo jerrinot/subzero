@@ -14,7 +14,6 @@
     <modules>
         <module>subzero-core</module>
         <module>subzero-all</module>
-        <module>subzero-all-it-hz50</module>
     </modules>
 
     <name>SubZero</name>
@@ -51,7 +50,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <additionalparam>-Xdoclint:none</additionalparam>
 
-        <kryo.version>4.0.2</kryo.version>
+        <kryo.version>5.2.0</kryo.version>
         <hazelcast.version>3.7</hazelcast.version>
 
         <junit.version>4.12</junit.version>

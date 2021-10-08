@@ -7,7 +7,7 @@ public final class EnableSyntheticFields implements SerializerConfigurer {
     @Override
     public void configure(Class<?> clazz, Object serializer) {
         if (serializer instanceof FieldSerializer) {
-            ((FieldSerializer<?>) serializer).setIgnoreSyntheticFields(false);
+            ((FieldSerializer<?>) serializer).getFieldSerializerConfig().setIgnoreSyntheticFields(false);
         }
     }
 }
