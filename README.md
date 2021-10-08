@@ -1,7 +1,6 @@
 # SubZero - Fast Serialization for Hazelcast
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all/badge.svg)](https://maven-badges.herokuapp.com/maven-central/info.jerrinot/subzero-all)
-[![Build Status](https://travis-ci.org/jerrinot/subzero.svg?branch=master)](https://travis-ci.org/jerrinot/subzero)
 [![Join the chat at https://gitter.im/subzero-hz/Lobby](https://badges.gitter.im/subzero-hz/Lobby.svg)](https://gitter.im/subzero-hz/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 SubZero provides dead easy Hazelcast - Kryo integration. No coding required.
