@@ -75,7 +75,7 @@ pom.xml and you are ready to roll!
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-all</artifactId>
-    <version>0.9</version>
+    <version>0.11</version>
 </dependency>
 ````        
 This version has all dependencies packaged inside. You can also use a 
@@ -84,7 +84,7 @@ version with regular dependencies:
 <dependency>
     <groupId>info.jerrinot</groupId>
     <artifactId>subzero-core</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
 </dependency>
 ````
 
@@ -171,7 +171,13 @@ public class HashMapSerializerExample extends AbstractTypeSpecificUserSerializer
 ````
 
 ## Hazelcast Compatibility
-SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12 and 4.0
+SubZero is continuously tested with Hazelcast 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 4.0 and 5.0
+
+## Requirments
+Subzero requires JDK8 or newer.
+
+## Known Issues
+Subzero-All currently [does not support](https://github.com/jerrinot/subzero/issues/46) 3rd party Kryo serializers. If you need to register a 3rd party serializer then use Subzero-Core. 
 
 ## Further Ideas
 - More serialization strategies. Currently Kryo is the only supported
