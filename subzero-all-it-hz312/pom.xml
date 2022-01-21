@@ -10,7 +10,7 @@
     <artifactId>subzero-all-it-hz312</artifactId>
 
     <properties>
-        <hazelcast.version>3.12.6</hazelcast.version>
+        <hazelcast.version>4.0.5</hazelcast.version>
     </properties>
 
     <dependencies>
