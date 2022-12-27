@@ -10,7 +10,7 @@
     <artifactId>subzero-all-it-hz39</artifactId>
 
     <properties>
-        <hazelcast.version>3.9.4</hazelcast.version>
+        <hazelcast.version>3.12.13</hazelcast.version>
     </properties>
 
     <dependencies>
